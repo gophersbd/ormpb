@@ -12,8 +12,8 @@ LINTER_EXCLUDE = "(^|/)mocks/|(^|/)mock_.*\.go|(^|/)(_)?tests/|(^|/)vendor/|(^|/
 PKGS := $(shell go list ./... | grep -v /vendor)
 
 fmt:
-	goimports -w *.go pkg
-	gofmt -s -w *.go pkg
+	goimports -w *.go cmd pkg
+	gofmt -s -w *.go cmd pkg
 
 install: fmt
 	go install . ./cmd/...
@@ -23,7 +23,7 @@ dep:
 	glide vc --only-code --no-tests
 
 build: install
-	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) .
+	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) ./cmd/ormpb
 
 check:
 	@gometalinter                        \
@@ -39,6 +39,7 @@ check:
          --enable=unconvert              \
          --enable=goconst                \
          --enable=goimports              \
+         --enable=misspell               \
          --min-occurrences=5             \
          --enable=gofmt                  \
          --deadline=1000s                \
@@ -52,7 +53,7 @@ check:
 #  - make test-race runs tests with race detector enabled.
 TEST_TIMEOUT = 60
 TEST_PKGS ?= ./...
-TEST_TARGETS := test-short test-verbose test-race
+TEST_TARGETS := test-short test-verbose test-race test-cover
 .PHONY: $(TEST_TARGETS) test tests
 test-short:   TEST_ARGS=-short
 test-verbose: TEST_ARGS=-v

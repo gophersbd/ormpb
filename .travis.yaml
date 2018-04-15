@@ -1,0 +1,25 @@
+language: go
+
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+    - go: 1.8.x
+    - go: 1.9.x
+    - go: 1.10.x
+
+cache:
+  directories:
+    - $GOPATH/src
+    - $GOPATH/pkg
+
+install:
+  - ./hack/scripts/go.sh
+  - ./hack/scripts/protoc.sh
+
+script:
+  - make check
+  - make install
+  - make test

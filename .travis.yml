@@ -1,5 +1,7 @@
 language: go
 
+sudo: required
+
 matrix:
   include:
     - go: 1.8.x

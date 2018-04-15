@@ -12,11 +12,11 @@ LINTER_EXCLUDE = "(^|/)mocks/|(^|/)mock_.*\.go|(^|/)(_)?tests/|(^|/)vendor/|(^|/
 PKGS := $(shell go list ./... | grep -v /vendor | grep -v /tests)
 
 fmt:
-	goimports -w *.go cmd pkg tests
-	gofmt -s -w *.go cmd pkg tests
+	@goimports -w *.go cmd pkg tests
+	@gofmt -s -w *.go cmd pkg tests
 
 install: fmt
-	go install . ./cmd/...
+	@go install . ./cmd/...
 
 dep:
 	glide up -v
@@ -72,8 +72,14 @@ clean:
 	@go clean
 
 tools:
-	go get -u golang.org/x/tools/cmd/goimports
-	go get -u github.com/Masterminds/glide
-	go get -u github.com/sgotti/glide-vc
-	go get -u github.com/onsi/ginkgo/ginkgo
-	go get -u github.com/vektra/mockery
+	@go get -u golang.org/x/tools/cmd/goimports
+	@go get -u github.com/Masterminds/glide
+	@go get -u github.com/sgotti/glide-vc
+	@go get -u github.com/onsi/ginkgo/ginkgo
+	@go get -u github.com/vektra/mockery
+	@go get -u golang.org/x/tools/cmd/cover
+	@go get -u github.com/mattn/goveralls
+
+cover:
+	@go test -v -covermode=count -coverprofile=coverage.out $(TEST_PKGS)
+	@$(GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $(COVERALLS_TOKEN)

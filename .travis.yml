@@ -21,3 +21,4 @@ script:
   - make check
   - make install
   - make test
+  - make test-e2e

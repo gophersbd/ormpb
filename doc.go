@@ -21,3 +21,8 @@
 // SOFTWARE.
 
 package ormpb
+
+import (
+	// Test dependencies so that it doesn't get cleaned by glide vc
+	_ "github.com/stretchr/testify"
+)

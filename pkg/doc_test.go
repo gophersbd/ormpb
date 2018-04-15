@@ -1,4 +1,4 @@
-package ormpb
+package pkg
 
 import (
 	"testing"

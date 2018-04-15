@@ -9,11 +9,11 @@ ROOT = ${REPO_ROOT}/${PROJECT}
 LINTER_PKGS = $(shell glide nv)
 LINTER_EXCLUDE = "(^|/)mocks/|(^|/)mock_.*\.go|(^|/)(_)?tests/|(^|/)vendor/|(^|/)example/"
 
-PKGS := $(shell go list ./... | grep -v /vendor)
+PKGS := $(shell go list ./... | grep -v /vendor | grep -v /tests)
 
 fmt:
-	goimports -w *.go cmd pkg
-	gofmt -s -w *.go cmd pkg
+	goimports -w *.go cmd pkg tests
+	gofmt -s -w *.go cmd pkg tests
 
 install: fmt
 	go install . ./cmd/...
@@ -52,7 +52,7 @@ check:
 #  - make test TEST_ARGS="-v -short" runs tests with the specified arguments;
 #  - make test-race runs tests with race detector enabled.
 TEST_TIMEOUT = 60
-TEST_PKGS ?= ./...
+TEST_PKGS ?= ./cmd/... ./pkg/... .
 TEST_TARGETS := test-short test-verbose test-race test-cover
 .PHONY: $(TEST_TARGETS) test tests
 test-short:   TEST_ARGS=-short
@@ -63,6 +63,9 @@ $(TEST_TARGETS): test
 
 test:
 	@go test -timeout $(TEST_TIMEOUT)s $(TEST_ARGS) $(TEST_PKGS)
+
+test-e2e:
+	@go test ./tests/e2e/...
 
 clean:
 	@rm -rf bin

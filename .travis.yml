@@ -8,11 +8,6 @@ matrix:
     - go: 1.9.x
     - go: 1.10.x
 
-cache:
-  directories:
-    - $GOPATH/src
-    - $GOPATH/pkg
-
 install:
   - ./hack/scripts/go.sh
   - ./hack/scripts/protoc.sh

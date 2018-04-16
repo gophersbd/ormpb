@@ -20,19 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Package ormpb is an golang orm implementation based on protocol buffer definition.
 package ormpb
 
 import (
-	// Test dependencies so that it doesn't get cleaned by glide vc
-	_ "github.com/stretchr/testify"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-// Dummy exits for test coverage to generate a centralized test coverage for this repo
-func Dummy() bool {
-	return true
-}
-
-func init() {
-	Dummy()
+func TestDummy(t *testing.T) {
+	assert.True(t, Dummy())
 }

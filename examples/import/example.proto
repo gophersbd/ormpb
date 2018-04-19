@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "ormpb/protobuf/option.proto";
+
+package ormpb.examples.import;
+
+option go_package = "importpb";
+option java_package = "com.ormpb.examples.import.pb";
+
+message Example {
+  option (ormpb.protobuf.table).name = "examples";
+  string name = 1 [
+    (ormpb.protobuf.column).name = "name"
+  ];
+}

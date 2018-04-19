@@ -19,6 +19,7 @@ fmt: gen
 compile: fmt
 	@prototool compile protobuf/
 	@go install . ./cmd/...
+	@prototool compile examples/
 
 dep:
 	glide up -v
@@ -69,6 +70,7 @@ test-cover:   TEST_ARGS=-cover
 $(TEST_TARGETS): test
 
 test:
+	@prototool compile examples
 	@go test -timeout $(TEST_TIMEOUT)s $(TEST_ARGS) $(TEST_PKGS)
 
 test-e2e:

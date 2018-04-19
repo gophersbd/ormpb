@@ -34,4 +34,5 @@ extend google.protobuf.FieldOptions {
   bool auto_increment = 10000008;
   // TODO add support for more fields
   // please refer http://gorm.io/docs/models.html#Struct-tags
+
 }

@@ -11,21 +11,28 @@ LINTER_EXCLUDE = "(^|/)mocks/|(^|/)mock_.*\.go|(^|/)(_)?tests/|(^|/)vendor/|(^|/
 
 PKGS := $(shell go list ./... | grep -v /vendor | grep -v /tests)
 
-fmt:
+fmt: gen
 	@goimports -w *.go cmd pkg tests
 	@gofmt -s -w *.go cmd pkg tests
+	@prototool format -w protobuf/
 
-install: fmt
+compile: fmt
+	@prototool compile protobuf/
 	@go install . ./cmd/...
 
 dep:
 	glide up -v
 	glide vc --only-code --no-tests
 
-build: install
+build: compile
 	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) ./cmd/ormpb
 
+gen:
+	@prototool gen protobuf/
+
 check:
+	@prototool format -l protobuf/
+	@prototool lint protobuf/
 	@gometalinter                        \
          --exclude=${LINTER_EXCLUDE}     \
          --disable-all                   \

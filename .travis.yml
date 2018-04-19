@@ -13,7 +13,7 @@ install:
 
 script:
   - make check
-  - make install
+  - make compile
   - make test
   - make test-e2e
   - make cover

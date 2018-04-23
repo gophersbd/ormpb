@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "protobuf/option.proto";
+
+package ormpb.examples;
+
+option go_package = "ormpb.import";
+
+message Example {
+  option (ormpb.protobuf.table).name = "examples";
+}

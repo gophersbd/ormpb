@@ -29,7 +29,8 @@ build: compile
 	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) ./cmd/ormpb
 
 gen:
-	@prototool gen protobuf/
+	make -C protobuf/
+
 
 check:
 	@prototool format -l protobuf/

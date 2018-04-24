@@ -8,4 +8,11 @@ option go_package = "ormpb.import";
 
 message Example {
   option (ormpb.protobuf.table).name = "examples";
+  string label = 1 [
+    (ormpb.protobuf.column).name = "labels",
+    (ormpb.protobuf.column).type = "blob"
+  ];
+  int64 type = 2 [
+    (ormpb.protobuf.column).type = "bigint"
+  ];
 }

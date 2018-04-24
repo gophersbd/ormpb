@@ -20,13 +20,14 @@ message TableOptions {
   // table_name specifies the table name for the message
   optional string name = 1;
   extensions 10000001 to 10000003;
+  reserved "";
 }
 
 message ColumnOptions {
   // column_name specifies column name
   optional string name = 1;
   // type specifies column data type
-  optional  string type = 2;
+  optional string type = 2;
   // size specifies column size, default 255
   optional int32 size = 3;
   // primary_key specifies column as primary key

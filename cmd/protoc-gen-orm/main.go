@@ -1,49 +1,64 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
 
+	"github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
+	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
+	"github.com/gophersbd/ormpb/protoc-gen-orm/descriptor"
 	"github.com/gophersbd/ormpb/protoc-gen-orm/generator"
+	"github.com/grpc-ecosystem/grpc-gateway/codegenerator"
 )
 
 func main() {
 
-	g := generator.New()
+	reg := descriptor.NewRegistry()
 
-	data, err := ioutil.ReadAll(os.Stdin)
+	req, err := codegenerator.ParseRequest(os.Stdin)
 	if err != nil {
-		g.Error(err, "reading input")
+		glog.Fatal(err)
 	}
 
-	if err := proto.Unmarshal(data, g.Request); err != nil {
-		g.Error(err, "parsing input proto")
+	g := generator.New(reg)
+
+	if err := reg.Load(req); err != nil {
+		emitError(err)
+		return
 	}
 
-	if len(g.Request.FileToGenerate) == 0 {
-		g.Fail("no files to generate")
+	var targets []*descriptor.File
+	for _, target := range req.FileToGenerate {
+		f, err := reg.LookupFile(target)
+		if err != nil {
+			glog.Fatal(err)
+		}
+		targets = append(targets, f)
 	}
 
-	g.CommandLineParameters(g.Request.GetParameter())
-
-	// Create a wrapped version of the Descriptors and EnumDescriptors that
-	// point to the file that defines them.
-	g.WrapTypes()
-
-	g.SetPackageNames()
-
-	g.BuildTypeNameMap()
-
-	g.GenerateAllFiles()
-
-	// Send back the results.
-	data, err = proto.Marshal(g.Response)
+	out, err := g.Generate(targets)
+	glog.V(1).Info("Processed code generator request")
 	if err != nil {
-		g.Error(err, "failed to marshal output proto")
+		emitError(err)
+		return
 	}
-	_, err = os.Stdout.Write(data)
+	emitFiles(out)
+}
+
+func emitFiles(out []*plugin.CodeGeneratorResponse_File) {
+	emitResp(&plugin.CodeGeneratorResponse{File: out})
+}
+
+func emitError(err error) {
+	emitResp(&plugin.CodeGeneratorResponse{Error: proto.String(err.Error())})
+}
+
+func emitResp(resp *plugin.CodeGeneratorResponse) {
+	buf, err := proto.Marshal(resp)
 	if err != nil {
-		g.Error(err, "failed to write output proto")
+		glog.Fatal(err)
+	}
+	if _, err := os.Stdout.Write(buf); err != nil {
+		glog.Fatal(err)
 	}
 }

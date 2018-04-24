@@ -26,11 +26,10 @@ dep:
 	glide vc --only-code --no-tests
 
 build: compile
-	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) ./cmd/ormpb
+	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) ./cmd/protoc-gen-orm
 
 gen:
 	make -C protobuf/
-
 
 check:
 	@prototool format -l protobuf/

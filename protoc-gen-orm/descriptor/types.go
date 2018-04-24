@@ -11,7 +11,7 @@ type GoPackage struct {
 	Path string
 	// Name is the package name of the package
 	Name string
-	// Alias is an alias of the package unique within the current invokation of grpc-gateway generator.
+	// Alias is an alias of the package unique within the current invokation of orm generator.
 	Alias string
 }
 

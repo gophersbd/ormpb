@@ -64,9 +64,7 @@ func (r *Registry) Load(req *plugin.CodeGeneratorRequest) error {
 	return nil
 }
 
-// loadFile loads messages, enumerations and fields from "file".
-// It does not loads services and methods in "file".  You need to call
-// loadServices after loadFiles is called for all files to load services and methods.
+// loadFile loads messages and fields from "file".
 func (r *Registry) loadFile(file *descriptor.FileDescriptorProto) {
 	pkg := GoPackage{
 		Path: r.goPackagePath(file),
@@ -158,7 +156,7 @@ func sanitizePackageName(pkgName string) string {
 }
 
 // packageIdentityName returns the identity of packages.
-// protoc-gen-grpc-gateway rejects CodeGenerationRequests which contains more than one packages
+// protoc-gen-orm rejects CodeGenerationRequests which contains more than one packages
 // as protoc-gen-go does.
 func (r *Registry) packageIdentityName(f *descriptor.FileDescriptorProto) string {
 	if f.Options != nil && f.Options.GoPackage != nil {

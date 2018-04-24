@@ -6,12 +6,10 @@ matrix:
   include:
     - go: 1.10.1
 
-install:
+sxript:
   - ./hack/scripts/go.sh
   - ./hack/scripts/protoc.sh
   - make tools
-
-script:
   - make check
   - make compile
   - make test

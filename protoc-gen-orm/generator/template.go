@@ -33,10 +33,10 @@ func (*{{$msg.Name}}) TableName() string {
 	return "{{$msg.TableOption.GetName}}"
 }
 
-func (*{{$msg.Name}}) Tag(field, name string) map[string]map[string]string {
+func (*{{$msg.Name}}) Tag(field, tag string) (val string, found bool) {
 	m := map[string]map[string]string{
 		{{range $f := $msg.Fields}}
-		"{{$f.Name}}": map[string]string{
+		"{{$f.Name}}": {
 			{{- if $f.ColumnOption.GetName }}
 			"name": "{{$f.ColumnOption.GetName}}",
 			{{- end }}
@@ -46,7 +46,8 @@ func (*{{$msg.Name}}) Tag(field, name string) map[string]map[string]string {
 		},
 		{{end}}
     }
-	return m
+	val, found = m[field][tag]
+	return
 }
 {{end}}
 

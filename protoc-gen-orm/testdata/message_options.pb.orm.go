@@ -7,17 +7,18 @@ func (*Example) TableName() string {
 	return "examples"
 }
 
-func (*Example) Tag(field, name string) map[string]map[string]string {
+func (*Example) Tag(field, tag string) (val string, found bool) {
 	m := map[string]map[string]string{
 
-		"Label": map[string]string{
+		"Label": {
 			"name": "labels",
 			"type": "blob",
 		},
 
-		"Type": map[string]string{
+		"Type": {
 			"type": "bigint",
 		},
 	}
-	return m
+	val, found = m[field][tag]
+	return
 }

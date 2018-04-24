@@ -13,7 +13,7 @@ PKGS := $(shell go list ./... | grep -v /vendor | grep -v /tests)
 
 fmt: gen
 	@goimports -w *.go cmd pkg tests
-	@gofmt -s -w *.go cmd pkg tests
+	@gofmt -s -w *.go cmd pkg tests protoc-gen-orm
 	@prototool format -w protobuf/
 
 compile: fmt

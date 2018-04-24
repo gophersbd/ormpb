@@ -1,6 +1,8 @@
 package descriptor
 
 import (
+	"strings"
+
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/gophersbd/ormpb/protobuf"
 )
@@ -26,14 +28,34 @@ type File struct {
 
 // Message describes a protocol buffer message types
 type Message struct {
+	// File is the file where the message is defined
+	File *File
+	// Outers is a list of outer messages if this message is a nested type.
+	Outers []string
 	*descriptor.DescriptorProto
 	TableOption *protobuf.TableOptions
 	Fields      []*Field
+
+	// Index is proto path index of this message in File.
+	Index int
 }
 
 // Field wraps descriptor.FieldDescriptorProto for richer features.
 type Field struct {
+	// Message is the message type which this field belongs to.
+	Message *Message
 	*descriptor.FieldDescriptorProto
 	Name         string
 	ColumnOption *protobuf.ColumnOptions
+}
+
+// FQMN return register name
+func (m *Message) FQMN() string {
+	components := []string{""}
+	if m.File.Package != nil {
+		components = append(components, m.File.GetPackage())
+	}
+	components = append(components, m.Outers...)
+	components = append(components, m.GetName())
+	return strings.Join(components, ".")
 }

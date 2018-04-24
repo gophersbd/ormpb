@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	goGen "github.com/golang/protobuf/protoc-gen-go/generator"
-
+	"github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
+	goGen "github.com/golang/protobuf/protoc-gen-go/generator"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/protobuf"
 )
@@ -81,9 +81,12 @@ func (r *Registry) loadFile(file *descriptor.FileDescriptorProto) {
 }
 
 func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descriptor.DescriptorProto) {
-	for _, md := range msgs {
+	for i, md := range msgs {
 		m := &Message{
+			File:            file,
+			Outers:          outerPath,
 			DescriptorProto: md,
+			Index:           i,
 		}
 
 		if md.Options != nil {
@@ -96,6 +99,7 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 		for _, fd := range md.GetField() {
 
 			f := &Field{
+				Message:              m,
 				FieldDescriptorProto: fd,
 			}
 
@@ -111,6 +115,8 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 			m.Fields = append(m.Fields, f)
 		}
 		file.Messages = append(file.Messages, m)
+		r.msgs[m.FQMN()] = m
+		glog.V(1).Infof("register name: %s", m.FQMN())
 
 		var outers []string
 		outers = append(outers, outerPath...)
@@ -124,9 +130,6 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 // if it includes a slash,  Otherwide, it generates a path from the file name of "f".
 func (r *Registry) goPackagePath(f *descriptor.FileDescriptorProto) string {
 	name := f.GetName()
-	if pkg, ok := r.pkgMap[name]; ok {
-		return path.Join(r.prefix, pkg)
-	}
 
 	gopkg := f.Options.GetGoPackage()
 	idx := strings.LastIndex(gopkg, "/")
@@ -176,12 +179,6 @@ func (r *Registry) packageIdentityName(f *descriptor.FileDescriptorProto) string
 		}
 		return sanitizePackageName(gopkg[sc+1:])
 	}
-	if p := r.importPath; len(p) != 0 {
-		if i := strings.LastIndex(p, "/"); i >= 0 {
-			p = p[i+1:]
-		}
-		return p
-	}
 
 	if f.Package == nil {
 		base := filepath.Base(f.GetName())
@@ -198,4 +195,29 @@ func (r *Registry) LookupFile(name string) (*File, error) {
 		return nil, fmt.Errorf("no such file given: %s", name)
 	}
 	return f, nil
+}
+
+// LookupMsg return Message using name
+func (r *Registry) LookupMsg(location, name string) (*Message, error) {
+	glog.V(1).Infof("lookup %s from %s", name, location)
+	if strings.HasPrefix(name, ".") {
+		m, ok := r.msgs[name]
+		if !ok {
+			return nil, fmt.Errorf("no message found: %s", name)
+		}
+		return m, nil
+	}
+
+	if !strings.HasPrefix(location, ".") {
+		location = fmt.Sprintf(".%s", location)
+	}
+	components := strings.Split(location, ".")
+	for len(components) > 0 {
+		fqmn := strings.Join(append(components, name), ".")
+		if m, ok := r.msgs[fqmn]; ok {
+			return m, nil
+		}
+		components = components[:len(components)-1]
+	}
+	return nil, fmt.Errorf("no message found: %s", name)
 }

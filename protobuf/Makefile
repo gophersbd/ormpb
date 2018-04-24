@@ -6,5 +6,4 @@ ROOT = ${REPO_ROOT}/${PROJECT}
 regenerate:
 	@echo WARNING! THIS RULE IS PROBABLY NOT RIGHT FOR YOUR INSTALLATION
 	@prototool gen option.proto
-	protoc --go_out=../../. -I${ROOT} ${ROOT}/protobuf/option.proto
-
+	protoc --go_out=../../. -I/usr/local/include -I${ROOT} ${ROOT}/protobuf/option.proto

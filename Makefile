@@ -60,7 +60,7 @@ check:
 #  - make test TEST_ARGS="-v -short" runs tests with the specified arguments;
 #  - make test-race runs tests with race detector enabled.
 TEST_TIMEOUT = 60
-TEST_PKGS ?= ./cmd/... ./pkg/... ./protoc-gen-orm/...
+TEST_PKGS ?= ./pkg/... ./protoc-gen-orm/...
 TEST_TARGETS := test-short test-verbose test-race test-cover
 .PHONY: $(TEST_TARGETS) test tests
 test-short:   TEST_ARGS=-short

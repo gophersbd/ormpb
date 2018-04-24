@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 import "google/protobuf/descriptor.proto";
 
@@ -8,38 +8,36 @@ package ormpb.protobuf;
 
 // Message Options to Use Table level tags in
 extend google.protobuf.MessageOptions {
-  optional TableOptions table = 10000001;
+  TableOptions table = 10000001;
 }
 
 // Field options to specifies orms tags for the field
 extend google.protobuf.FieldOptions {
-  optional ColumnOptions column = 10000003;
+  ColumnOptions column = 10000003;
 }
 
 message TableOptions {
   // table_name specifies the table name for the message
-  optional string name = 1;
-  extensions 10000001 to 10000003;
-  reserved "";
+  string name = 1;
 }
 
 message ColumnOptions {
   // column_name specifies column name
-  optional string name = 1;
+  string name = 1;
   // type specifies column data type
-  optional string type = 2;
+  string type = 2;
   // size specifies column size, default 255
-  optional int32 size = 3;
+  int32 size = 3;
   // primary_key specifies column as primary key
-  optional bool primary_key = 4;
+  bool primary_key = 4;
   // unique specifies column as unique
-  optional bool unique = 5;
+  bool unique = 5;
   // default specifies column default value
-  optional string default = 6;
+  string default = 6;
   // not_null specifies column as NOT NULL
-  optional bool not_null = 7;
+  bool not_null = 7;
   // auto_increment specifies column auto incrementable or not
-  optional bool auto_increment = 8;
+  bool auto_increment = 8;
   // TODO add support for more fields
   // please refer http://gorm.io/docs/models.html#Struct-tags
 

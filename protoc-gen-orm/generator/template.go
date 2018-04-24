@@ -2,18 +2,31 @@ package generator
 
 import (
 	"bytes"
+	"reflect"
 	"text/template"
 
+	"github.com/gophersbd/ormpb/protobuf"
 	"github.com/gophersbd/ormpb/protoc-gen-orm/descriptor"
 )
 
 type param struct {
 	*descriptor.File
-	Imports []descriptor.GoPackage
+	Imports    []descriptor.GoPackage
+	ColumnTags []string
 }
 
 func applyTemplate(p param) (string, error) {
 	w := bytes.NewBuffer(nil)
+
+	p.ColumnTags = make([]string, 0)
+	t := protobuf.ColumnOptions{}
+	co := reflect.ValueOf(&t).Elem()
+	typeOfCO := co.Type()
+
+	for i := 0; i < co.NumField(); i++ {
+		p.ColumnTags = append(p.ColumnTags, typeOfCO.Field(i).Name)
+	}
+
 	if err := ormTemplate.Execute(w, p); err != nil {
 		return "", err
 	}
@@ -27,29 +40,37 @@ var (
 
 package {{.GoPkg.Name}}
 
+
+
+const(
+{{range $t := .ColumnTags}}
+ColumnTag{{$t}} = "{{$t}}"
+{{- end}}
+)
+
 {{range $msg := .Messages}}
 
 func (*{{$msg.Name}}) TableName() string {
 	return "{{$msg.TableOption.GetName}}"
 }
 
+
 func (*{{$msg.Name}}) Tag(field, tag string) (val string, found bool) {
 	m := map[string]map[string]string{
-		{{range $f := $msg.Fields}}
+		{{- range $f := $msg.Fields}}
 		"{{$f.Name}}": {
-			{{- if $f.ColumnOption.GetName }}
-			"name": "{{$f.ColumnOption.GetName}}",
-			{{- end }}
-			{{- if $f.ColumnOption.GetType }}
-			"type": "{{$f.ColumnOption.GetType}}",
-			{{- end }}
+			{{- range $key, $value := $f.ColumnTags}}
+				{{- if $value }}
+					ColumnTag{{$key}}: "{{$value}}",
+				{{- end}}
+			{{- end}}
 		},
-		{{end}}
+		{{- end}}
     }
 	val, found = m[field][tag]
 	return
 }
-{{end}}
+{{- end}}
 
 `))
 )

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path"
 	"path/filepath"
+	"reflect"
 	"strings"
 
 	"github.com/golang/glog"
@@ -96,17 +97,32 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 			}
 		}
 
+		t := protobuf.ColumnOptions{}
+		co := reflect.ValueOf(&t).Elem()
+		typeOfCO := co.Type()
+
 		for _, fd := range md.GetField() {
 
 			f := &Field{
 				Message:              m,
 				FieldDescriptorProto: fd,
+				ColumnTags:           make(map[string]string),
 			}
 
 			if fd.Options != nil {
 				if proto.HasExtension(fd.Options, protobuf.E_Column) {
 					to, _ := proto.GetExtension(fd.Options, protobuf.E_Column)
 					f.ColumnOption = to.(*protobuf.ColumnOptions)
+
+					tv := *f.ColumnOption
+					cov := reflect.ValueOf(&tv).Elem()
+
+					for i := 0; i < co.NumField(); i++ {
+						name := typeOfCO.Field(i).Name
+						value := fmt.Sprintf("%v", cov.FieldByName(name).Interface())
+						f.ColumnTags[name] = value
+					}
+
 				}
 			}
 

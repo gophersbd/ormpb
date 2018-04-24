@@ -3,20 +3,39 @@
 
 package ormpb_example
 
+const (
+	ColumnTagName          = "Name"
+	ColumnTagType          = "Type"
+	ColumnTagSize          = "Size"
+	ColumnTagPrimaryKey    = "PrimaryKey"
+	ColumnTagUnique        = "Unique"
+	ColumnTagDefault       = "Default"
+	ColumnTagNotNull       = "NotNull"
+	ColumnTagAutoIncrement = "AutoIncrement"
+)
+
 func (*Example) TableName() string {
 	return "examples"
 }
 
 func (*Example) Tag(field, tag string) (val string, found bool) {
 	m := map[string]map[string]string{
-
 		"Label": {
-			"name": "labels",
-			"type": "blob",
+			ColumnTagAutoIncrement: "false",
+			ColumnTagName:          "labels",
+			ColumnTagNotNull:       "false",
+			ColumnTagPrimaryKey:    "false",
+			ColumnTagSize:          "0",
+			ColumnTagType:          "blob",
+			ColumnTagUnique:        "false",
 		},
-
 		"Type": {
-			"type": "bigint",
+			ColumnTagAutoIncrement: "false",
+			ColumnTagNotNull:       "false",
+			ColumnTagPrimaryKey:    "false",
+			ColumnTagSize:          "0",
+			ColumnTagType:          "bigint",
+			ColumnTagUnique:        "false",
 		},
 	}
 	val, found = m[field][tag]

@@ -33,7 +33,7 @@ func (*{{$msg.Name}}) TableName() string {
 	return "{{$msg.TableOption.GetName}}"
 }
 
-func (*{{$msg.Name}}) Tag(field, name string) string {
+func (*{{$msg.Name}}) Tag(field, name string) map[string]map[string]string {
 	m := map[string]map[string]string{
 		{{range $f := $msg.Fields}}
 		"{{$f.Name}}": map[string]string{

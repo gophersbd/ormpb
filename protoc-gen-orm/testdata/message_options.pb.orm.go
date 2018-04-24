@@ -7,7 +7,7 @@ func (*Example) TableName() string {
 	return "examples"
 }
 
-func (*Example) Tag(field, name string) string {
+func (*Example) Tag(field, name string) map[string]map[string]string {
 	m := map[string]map[string]string{
 
 		"Label": map[string]string{

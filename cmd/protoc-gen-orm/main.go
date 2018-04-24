@@ -22,15 +22,15 @@ func main() {
 
 	g := generator.New(reg)
 
-	if err := reg.Load(req); err != nil {
+	if err = reg.Load(req); err != nil {
 		emitError(err)
 		return
 	}
 
 	var targets []*descriptor.File
 	for _, target := range req.FileToGenerate {
-		f, err := reg.LookupFile(target)
-		if err != nil {
+		var f *descriptor.File
+		if f, err = reg.LookupFile(target); err != nil {
 			glog.Fatal(err)
 		}
 		targets = append(targets, f)

@@ -4,7 +4,7 @@ import "protobuf/option.proto";
 
 package ormpb.examples;
 
-option go_package = "ormpb.import";
+option go_package = "ormpb.example";
 
 message Example {
   option (ormpb.protobuf.table).name = "examples";

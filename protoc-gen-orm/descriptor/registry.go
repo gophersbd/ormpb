@@ -89,9 +89,9 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 		}
 
 		if md.Options != nil {
-			if proto.HasExtension(md.Options, ormpb_protobuf.E_Table) {
-				to, _ := proto.GetExtension(md.Options, ormpb_protobuf.E_Table)
-				m.TableOption = to.(*ormpb_protobuf.TableOptions)
+			if proto.HasExtension(md.Options, protobuf.E_Table) {
+				to, _ := proto.GetExtension(md.Options, protobuf.E_Table)
+				m.TableOption = to.(*protobuf.TableOptions)
 			}
 		}
 
@@ -102,9 +102,9 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 			}
 
 			if fd.Options != nil {
-				if proto.HasExtension(fd.Options, ormpb_protobuf.E_Column) {
-					to, _ := proto.GetExtension(fd.Options, ormpb_protobuf.E_Column)
-					f.ColumnOption = to.(*ormpb_protobuf.ColumnOptions)
+				if proto.HasExtension(fd.Options, protobuf.E_Column) {
+					to, _ := proto.GetExtension(fd.Options, protobuf.E_Column)
+					f.ColumnOption = to.(*protobuf.ColumnOptions)
 				}
 			}
 

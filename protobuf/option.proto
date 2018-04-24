@@ -4,6 +4,8 @@ import "google/protobuf/descriptor.proto";
 
 package ormpb.protobuf;
 
+option go_package = "github.com/gophersbd/ormpb/protobuf";
+
 // TODO: (@sadlil) contact authorites to get unique field numbers
 
 // Message Options to Use Table level tags in

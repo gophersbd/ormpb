@@ -8,14 +8,13 @@ import (
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/protoc-gen-orm/descriptor"
 	"github.com/gophersbd/ormpb/protoc-gen-orm/generator"
-	"github.com/grpc-ecosystem/grpc-gateway/codegenerator"
 )
 
 func main() {
 
 	reg := descriptor.NewRegistry()
 
-	req, err := codegenerator.ParseRequest(os.Stdin)
+	req, err := generator.ParseRequest(os.Stdin)
 	if err != nil {
 		glog.Fatal(err)
 	}

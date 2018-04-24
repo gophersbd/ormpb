@@ -24,6 +24,7 @@ type generator struct {
 	baseImports []descriptor.GoPackage
 }
 
+// New return Generator interface
 func New(reg *descriptor.Registry) Generator {
 	var imports []descriptor.GoPackage
 	for _, pkgpath := range []string{

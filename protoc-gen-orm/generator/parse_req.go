@@ -9,6 +9,7 @@ import (
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 )
 
+// ParseRequest read io.Reader and convert it into CodeGeneratorRequest
 func ParseRequest(r io.Reader) (*plugin.CodeGeneratorRequest, error) {
 	input, err := ioutil.ReadAll(r)
 	if err != nil {

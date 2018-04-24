@@ -27,7 +27,7 @@ type File struct {
 // Message describes a protocol buffer message types
 type Message struct {
 	*descriptor.DescriptorProto
-	TableOption *ormpb_protobuf.TableOptions
+	TableOption *protobuf.TableOptions
 	Fields      []*Field
 }
 
@@ -35,5 +35,5 @@ type Message struct {
 type Field struct {
 	*descriptor.FieldDescriptorProto
 	Name         string
-	ColumnOption *ormpb_protobuf.ColumnOptions
+	ColumnOption *protobuf.ColumnOptions
 }

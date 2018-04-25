@@ -12,9 +12,15 @@ PROTOC_ZIP='protoc-'${PROTOC_VERSION}-${PROTOC_OS}-${ARCH}'.zip'
 echo 'Install Protoc and Others required library for OS='${OS} 'ARCH='${ARCH}
 
 curl -OL https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/${PROTOC_ZIP}
-sudo unzip -o ${PROTOC_ZIP} -d /usr/local bin/protoc
+unzip -o ${PROTOC_ZIP} -d protoc3
+sudo mv protoc3/bin/protoc /usr/local/bin/
+sudo mkdir -p /usr/local/include/google/protobuf
+sudo rm -rf /usr/local/include/google/protobuf/*
+sudo mv -f protoc3/include/google/protobuf/* /usr/local/include/google/protobuf/
 sudo chmod +x /usr/local/bin/protoc
+sudo chmod -R 755 /usr/local/include
 rm -f ${PROTOC_ZIP}
+rm -rf protoc3
 
 go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger

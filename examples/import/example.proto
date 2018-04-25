@@ -10,6 +10,7 @@ option java_package = "com.ormpb.examples.import.pb";
 message Example {
   option (ormpb.protobuf.table).name = "examples";
   string name = 1 [
-    (ormpb.protobuf.column).name = "name"
+    (ormpb.protobuf.column).name = "name",
+    (ormpb.protobuf.column).size = 128
   ];
 }

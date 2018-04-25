@@ -19,19 +19,15 @@ func (*Example) TableName() string {
 }
 
 var (
-	_ExampleTagMap = map[string]map[string]string{
+	_ExampleTagMap = map[string]map[string]interface{}{
 		"Name": {
-			ColumnTagAutoIncrement: "false",
-			ColumnTagName:          "name",
-			ColumnTagNotNull:       "false",
-			ColumnTagPrimaryKey:    "false",
-			ColumnTagSize:          "0",
-			ColumnTagUnique:        "false",
+			ColumnTagName: "name",
+			ColumnTagSize: 128,
 		},
 	}
 )
 
-func (*Example) Tag(field, tag string) (val string, found bool) {
+func (*Example) Tag(field, tag string) (val interface{}, found bool) {
 	val, found = _ExampleTagMap[field][tag]
 	return
 }

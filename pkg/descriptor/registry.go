@@ -106,7 +106,7 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 			f := &Field{
 				Message:              m,
 				FieldDescriptorProto: fd,
-				ColumnTags:           make(map[string]string),
+				ColumnTags:           make(map[string]interface{}),
 			}
 
 			if fd.Options != nil {
@@ -119,7 +119,7 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 
 					for i := 0; i < co.NumField(); i++ {
 						name := typeOfCO.Field(i).Name
-						value := fmt.Sprintf("%v", cov.FieldByName(name).Interface())
+						value := cov.FieldByName(name).Interface()
 						f.ColumnTags[name] = value
 					}
 

@@ -47,7 +47,7 @@ type Field struct {
 	*descriptor.FieldDescriptorProto
 	Name         string
 	ColumnOption *protobuf.ColumnOptions
-	ColumnTags   map[string]string
+	ColumnTags   map[string]interface{}
 }
 
 // FQMN return register name

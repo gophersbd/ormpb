@@ -1,5 +1,6 @@
 package runtime
 
+// Constant name for column tags
 const (
 	ColumnTagName          = "Name"
 	ColumnTagType          = "Type"

@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
-	"github.com/gophersbd/ormpb/protoc-gen-orm/descriptor"
+	"github.com/gophersbd/ormpb/pkg/descriptor"
 )
 
 func TestLoadFile(t *testing.T) {

@@ -13,7 +13,7 @@ PKGS := $(shell go list ./... | grep -v /vendor | grep -v /tests)
 
 fmt: gen
 	@goimports -w *.go cmd pkg tests
-	@gofmt -s -w *.go cmd pkg tests protoc-gen-orm
+	@gofmt -s -w *.go cmd pkg tests
 	@prototool format -w protobuf/
 
 compile: fmt
@@ -29,7 +29,7 @@ build: compile
 	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) ./cmd/protoc-gen-orm
 
 gen:
-	make -C protobuf/
+	@prototool gen protobuf/
 
 check:
 	@prototool format -l protobuf/
@@ -60,7 +60,7 @@ check:
 #  - make test TEST_ARGS="-v -short" runs tests with the specified arguments;
 #  - make test-race runs tests with race detector enabled.
 TEST_TIMEOUT = 60
-TEST_PKGS ?= ./pkg/... ./protoc-gen-orm/...
+TEST_PKGS ?= ./cmd/... ./pkg/... .
 TEST_TARGETS := test-short test-verbose test-race test-cover
 .PHONY: $(TEST_TARGETS) test tests
 test-short:   TEST_ARGS=-short
@@ -92,3 +92,6 @@ tools:
 cover:
 	@go test -v -covermode=count -coverprofile=coverage.out $(TEST_PKGS)
 	@$(GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $(COVERALLS_TOKEN)
+
+gen-examples:
+	@make -C examples/import

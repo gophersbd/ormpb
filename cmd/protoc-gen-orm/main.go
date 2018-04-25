@@ -1,17 +1,27 @@
 package main
 
 import (
+	"flag"
 	"os"
 
 	"github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
-	"github.com/gophersbd/ormpb/protoc-gen-orm/descriptor"
-	"github.com/gophersbd/ormpb/protoc-gen-orm/generator"
+	"github.com/gophersbd/ormpb/pkg/descriptor"
+	"github.com/gophersbd/ormpb/pkg/generator"
+	"github.com/spf13/pflag"
 )
 
 func main() {
+	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+	pflag.Parse()
+	// Convinces goflags that we have called Parse() to avoid noisy logs.
+	flag.CommandLine.Parse([]string{})
 
+	Start()
+}
+
+func Start() {
 	reg := descriptor.NewRegistry()
 
 	req, err := generator.ParseRequest(os.Stdin)

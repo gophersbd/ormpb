@@ -17,6 +17,11 @@ type GoPackage struct {
 	Alias string
 }
 
+// Standard returns whether the import is a golang standard package.
+func (p GoPackage) Standard() bool {
+	return !strings.Contains(p.Path, ".")
+}
+
 // File wraps descriptor.FileDescriptorProto for richer features.
 type File struct {
 	*descriptor.FileDescriptorProto

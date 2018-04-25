@@ -7,7 +7,6 @@ import (
 	"text/template"
 
 	"github.com/gophersbd/ormpb/pkg/descriptor"
-	"github.com/gophersbd/ormpb/protobuf"
 )
 
 func printInterface(v interface{}) string {
@@ -21,21 +20,11 @@ func printInterface(v interface{}) string {
 
 type param struct {
 	*descriptor.File
-	Imports    []descriptor.GoPackage
-	ColumnTags []string
+	Imports []descriptor.GoPackage
 }
 
 func applyTemplate(p param) (string, error) {
 	w := bytes.NewBuffer(nil)
-
-	p.ColumnTags = make([]string, 0)
-	t := protobuf.ColumnOptions{}
-	co := reflect.ValueOf(&t).Elem()
-	typeOfCO := co.Type()
-
-	for i := 0; i < co.NumField(); i++ {
-		p.ColumnTags = append(p.ColumnTags, typeOfCO.Field(i).Name)
-	}
 
 	helperTemplate := template.New("orm")
 	helperTemplate.Funcs(template.FuncMap{"printInterface": printInterface})
@@ -55,10 +44,12 @@ var (
 
 package {{ .GoPkg.Name }}
 
-const(
-{{ range $t := .ColumnTags }}
-ColumnTag{{ $t }} = "{{ $t }}"
-{{- end }}
+import (
+	{{range $i := .Imports}}
+		{{if not $i.Standard}}
+			{{ $i.Name }} "{{ $i.Path }}"
+		{{end}}
+	{{end}}
 )
 
 {{ range $msg := .Messages }}
@@ -73,7 +64,7 @@ var (
 		"{{ $f.Name }}": {
 			{{- range $key, $value := $f.ColumnTags }}
 				{{- if $value }}
-					ColumnTag{{ $key }}: {{ $value | printInterface }},
+					runtime.ColumnTag{{ $key }}: {{ $value | printInterface }},
 				{{- end }}
 			{{- end }}
 		},

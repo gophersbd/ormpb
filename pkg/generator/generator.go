@@ -28,8 +28,7 @@ type generator struct {
 func New(reg *descriptor.Registry) Generator {
 	var imports []descriptor.GoPackage
 	for _, pkgpath := range []string{
-		"io",
-		"net/http",
+		"github.com/gophersbd/ormpb/pkg/runtime",
 	} {
 		pkg := descriptor.GoPackage{
 			Path: pkgpath,

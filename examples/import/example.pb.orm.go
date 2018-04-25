@@ -3,15 +3,8 @@
 
 package importpb
 
-const (
-	ColumnTagName          = "Name"
-	ColumnTagType          = "Type"
-	ColumnTagSize          = "Size"
-	ColumnTagPrimaryKey    = "PrimaryKey"
-	ColumnTagUnique        = "Unique"
-	ColumnTagDefault       = "Default"
-	ColumnTagNotNull       = "NotNull"
-	ColumnTagAutoIncrement = "AutoIncrement"
+import (
+	runtime "github.com/gophersbd/ormpb/pkg/runtime"
 )
 
 func (*Example) TableName() string {
@@ -21,8 +14,8 @@ func (*Example) TableName() string {
 var (
 	_ExampleTagMap = map[string]map[string]interface{}{
 		"Name": {
-			ColumnTagName: "name",
-			ColumnTagSize: 128,
+			runtime.ColumnTagName: "name",
+			runtime.ColumnTagSize: 128,
 		},
 	}
 )

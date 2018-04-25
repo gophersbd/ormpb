@@ -17,3 +17,14 @@ gen:
     - name: orm
       type: go
       output: ../../../
+
+# Lint directives.
+lint:
+  ids:
+    - ENUM_NAMES_CAMEL_CASE
+    - ENUM_NAMES_CAPITALIZED
+
+# Format directives.
+format:
+  indent: 2s
+  trim_newline: true

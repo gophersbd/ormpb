@@ -16,11 +16,12 @@ func main() {
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
 	// Convinces goflags that we have called Parse() to avoid noisy logs.
-	flag.CommandLine.Parse([]string{})
+	_ = flag.CommandLine.Parse([]string{})
 
 	Start()
 }
 
+// Start starts running the ormpb generator
 func Start() {
 	reg := descriptor.NewRegistry()
 

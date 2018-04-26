@@ -19,6 +19,9 @@ func TestLoadFile(t *testing.T) {
 			name: 'example.proto'
 			message_type <
 				name: 'Example'
+				options <
+					[ormpb.protobuf.table] < name : "examples" >
+				>
 				field <
 					name: 'label'
 					type: TYPE_STRING

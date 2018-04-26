@@ -3,19 +3,13 @@ package generator
 import (
 	"bytes"
 	"fmt"
-	"reflect"
 	"text/template"
 
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 )
 
 func printInterface(v interface{}) string {
-	switch reflect.ValueOf(v).Kind() {
-	case reflect.String:
-		return fmt.Sprintf(`"%v"`, v)
-	default:
-		return fmt.Sprintf("%v", v)
-	}
+	return fmt.Sprintf(`"%v"`, v)
 }
 
 type param struct {
@@ -55,11 +49,11 @@ import (
 {{ range $msg := .Messages }}
 
 func (*{{ $msg.Name }}) TableName() string {
-	return "{{ $msg.TableOption.GetName }}"
+	return "{{ $msg.TableOptions.GetName }}"
 }
 
 var (
-	_{{ $msg.Name }}TagMap = map[string]map[string]interface{}{
+	_{{ $msg.Name }}TagMap = map[string]map[string]string{
 		{{- range $f := $msg.Fields }}
 		"{{ $f.Name }}": {
 			{{- range $key, $value := $f.ColumnTags }}
@@ -72,7 +66,7 @@ var (
 	}
 )
 
-func (*{{ $msg.Name }}) Tag(field, tag string) (val interface{}, found bool) {
+func (*{{ $msg.Name }}) Tag(field, tag string) (val string, found bool) {
 	val, found = _{{ $msg.Name }}TagMap[field][tag]
 	return
 }

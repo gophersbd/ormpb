@@ -90,45 +90,47 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 			Index:           i,
 		}
 
+		m.TableOptions = &protobuf.TableOptions{}
 		if md.Options != nil {
 			if proto.HasExtension(md.Options, protobuf.E_Table) {
 				to, _ := proto.GetExtension(md.Options, protobuf.E_Table)
-				m.TableOption = to.(*protobuf.TableOptions)
+				m.TableOptions = to.(*protobuf.TableOptions)
 			}
 		}
 
-		t := protobuf.ColumnOptions{}
-		co := reflect.ValueOf(&t).Elem()
-		typeOfCO := co.Type()
+		co := protobuf.ColumnOptions{}
+		cov := reflect.ValueOf(&co).Elem()
+		typeOfcov := cov.Type()
 
 		for _, fd := range md.GetField() {
 
-			f := &Field{
+			filed := &Field{
 				Message:              m,
 				FieldDescriptorProto: fd,
 				ColumnTags:           make(map[string]interface{}),
 			}
 
+			filed.ColumnOptions = &protobuf.ColumnOptions{}
 			if fd.Options != nil {
 				if proto.HasExtension(fd.Options, protobuf.E_Column) {
 					to, _ := proto.GetExtension(fd.Options, protobuf.E_Column)
-					f.ColumnOption = to.(*protobuf.ColumnOptions)
+					filed.ColumnOptions = to.(*protobuf.ColumnOptions)
 
-					tv := *f.ColumnOption
+					tv := *filed.ColumnOptions
 					cov := reflect.ValueOf(&tv).Elem()
 
-					for i := 0; i < co.NumField(); i++ {
-						name := typeOfCO.Field(i).Name
+					for i := 0; i < cov.NumField(); i++ {
+						name := typeOfcov.Field(i).Name
 						value := cov.FieldByName(name).Interface()
-						f.ColumnTags[name] = value
+						filed.ColumnTags[name] = value
 					}
 
 				}
 			}
 
-			f.Name = goGen.CamelCase(fd.GetName())
+			filed.Name = goGen.CamelCase(fd.GetName())
 
-			m.Fields = append(m.Fields, f)
+			m.Fields = append(m.Fields, filed)
 		}
 		file.Messages = append(file.Messages, m)
 		r.msgs[m.FQMN()] = m

@@ -11,6 +11,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
+	"github.com/gophersbd/ormpb/pkg/validator"
 )
 
 // Generator is an abstraction of code generators.
@@ -43,6 +44,13 @@ func New(reg *descriptor.Registry) Generator {
 func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGeneratorResponse_File, error) {
 	var files []*plugin.CodeGeneratorResponse_File
 	for _, file := range targets {
+
+		for _, m := range file.Messages {
+			if err := validator.ValidateTableOptions(m); err != nil {
+				return nil, err
+			}
+		}
+
 		glog.V(1).Infof("Processing %s", file.GetName())
 		code, err := g.generate(file)
 		if err != nil {

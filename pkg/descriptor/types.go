@@ -38,8 +38,8 @@ type Message struct {
 	// Outers is a list of outer messages if this message is a nested type.
 	Outers []string
 	*descriptor.DescriptorProto
-	TableOption *protobuf.TableOptions
-	Fields      []*Field
+	TableOptions *protobuf.TableOptions
+	Fields       []*Field
 
 	// Index is proto path index of this message in File.
 	Index int
@@ -50,9 +50,9 @@ type Field struct {
 	// Message is the message type which this field belongs to.
 	Message *Message
 	*descriptor.FieldDescriptorProto
-	Name         string
-	ColumnOption *protobuf.ColumnOptions
-	ColumnTags   map[string]interface{}
+	Name          string
+	ColumnOptions *protobuf.ColumnOptions
+	ColumnTags    map[string]interface{}
 }
 
 // FQMN return register name

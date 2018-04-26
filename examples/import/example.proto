@@ -11,6 +11,8 @@ message Example {
   option (ormpb.protobuf.table).name = "examples";
   string name = 1 [
     (ormpb.protobuf.column).name = "name",
-    (ormpb.protobuf.column).size = 128
+    (ormpb.protobuf.column).size = 128,
+    (ormpb.protobuf.column).primary_key = true
+
   ];
 }

@@ -184,11 +184,11 @@ func TestExtension(t *testing.T) {
 		return
 	}
 
-	if msg.TableOption == nil {
+	if msg.TableOptions == nil {
 		t.Error("failed to parse TableOptions")
 	}
 
-	tableOptions := msg.TableOption
+	tableOptions := msg.TableOptions
 	if got, want := tableOptions.GetName(), "examples"; got != want {
 		t.Errorf("failed to parse TableOptions; want %v, got %v", want, got)
 	}
@@ -198,16 +198,16 @@ func TestExtension(t *testing.T) {
 	}
 
 	field := msg.Fields[0]
-	if field.ColumnOption == nil {
-		t.Error("failed to parse ColumnOption")
+	if field.ColumnOptions == nil {
+		t.Error("failed to parse ColumnOptions")
 	}
 
-	columnOption := field.ColumnOption
+	columnOption := field.ColumnOptions
 	if got, want := columnOption.GetName(), "labels"; got != want {
-		t.Errorf("failed to parse ColumnOption; want %v, got %v", want, got)
+		t.Errorf("failed to parse ColumnOptions; want %v, got %v", want, got)
 	}
 	if got, want := columnOption.GetType(), "blob"; got != want {
-		t.Errorf("failed to parse ColumnOption; want %v, got %v", want, got)
+		t.Errorf("failed to parse ColumnOptions; want %v, got %v", want, got)
 	}
 }
 

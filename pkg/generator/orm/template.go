@@ -3,6 +3,7 @@ package orm
 import (
 	"bytes"
 	"fmt"
+	"reflect"
 	"text/template"
 
 	"github.com/gophersbd/ormpb/pkg/descriptor"
@@ -10,6 +11,12 @@ import (
 
 func printInterface(v interface{}) string {
 	return fmt.Sprintf(`"%v"`, v)
+}
+
+var fns = template.FuncMap{
+	"has_tag": func(a interface{}) bool {
+		return reflect.ValueOf(a).Len() > 0
+	},
 }
 
 type param struct {
@@ -22,6 +29,7 @@ func applyTemplate(p param) (string, error) {
 
 	helperTemplate := template.New("orm")
 	helperTemplate.Funcs(template.FuncMap{"printInterface": printInterface})
+	helperTemplate = helperTemplate.Funcs(fns)
 
 	ormTemplate := template.Must(helperTemplate.Parse(ormTemplate))
 
@@ -55,13 +63,15 @@ func (*{{ $msg.Name }}) TableName() string {
 var (
 	_{{ $msg.Name }}TagMap = map[string]map[string]string{
 		{{- range $f := $msg.Fields }}
-		"{{ $f.Name }}": {
-			{{- range $key, $value := $f.Column.Tags }}
-				{{- if $value }}
-					runtime.ColumnTag{{ $key }}: {{ $value | printInterface }},
-				{{- end }}
+			{{- if has_tag $f.Column.Tags }}
+				"{{- $f.Name }}": {
+					{{- range $key, $value := $f.Column.Tags }}
+						{{- if $value }}
+							runtime.ColumnTag{{ $key }}: {{ $value | printInterface }},
+						{{- end }}
+					{{- end }}
+				},
 			{{- end }}
-		},
 		{{- end }}
 	}
 )

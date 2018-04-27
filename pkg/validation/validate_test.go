@@ -5,20 +5,23 @@ import (
 
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 	"github.com/gophersbd/ormpb/protobuf"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestValidateTableOptions(t *testing.T) {
 	m := &descriptor.Message{}
 	err := ValidateTableOptions(m)
-	if err == nil {
-		t.Error("Validating TableOptions should fail")
-	}
+	assert.NotNil(t, err)
 
 	m.TableOptions = &protobuf.TableOptions{}
 	err = ValidateTableOptions(m)
-	if err == nil {
-		t.Error("Validating TableOptions should fail. Missing name in TableOptions")
-	}
+	assert.NotNil(t, err)
+
+	m.TableOptions.Name = "examples"
+	err = ValidateTableOptions(m)
+	assert.NotNil(t, err)
+
+	m.TableOptions.Type = "postgres"
 
 	m.Fields = []*descriptor.Field{
 		{
@@ -33,4 +36,8 @@ func TestValidateTableOptions(t *testing.T) {
 	if err != nil {
 		t.Error("Validating TableOptions should not fail.")
 	}
+}
+
+func TestValidateColumnOptions(t *testing.T) {
+	assert.Nil(t, ValidateColumnOptions(nil))
 }

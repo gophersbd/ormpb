@@ -16,7 +16,7 @@ func init() {
 
 // ColumnSignatureOf returns signature of column
 func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
-	var sqlType, at = ParseColumnSignature(field, s)
+	var sqlType, at = ParseColumnSignature(field)
 
 	switch sqlType.Name {
 	case Int:

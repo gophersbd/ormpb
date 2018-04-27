@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
 import "ormpb/protobuf/option.proto";
 
 package ormpb.examples.import;
@@ -25,4 +26,6 @@ message Example {
   double point = 4 [
     (ormpb.protobuf.column).default = "17.33"
   ];
+
+  google.protobuf.Timestamp created_at = 5;
 }

@@ -19,6 +19,7 @@ const (
 	Serial    = "SERIAL"
 	BigSerial = "BIGSERIAL"
 	Integer   = "INTEGER"
+	Timestamp = "TIMESTAMP"
 )
 
 // SQLType for Data type and Data size
@@ -28,8 +29,8 @@ type SQLType struct {
 }
 
 // type2SQLType converts Proto type to DB Data type
-func type2SQLType(t descriptor.FieldDescriptorProto_Type) (st SQLType) {
-	switch t {
+func type2SQLType(filedType descriptor.FieldDescriptorProto_Type, typeName string) (st SQLType) {
+	switch filedType {
 	case descriptor.FieldDescriptorProto_TYPE_DOUBLE:
 		st = SQLType{Double, 0}
 	case descriptor.FieldDescriptorProto_TYPE_FLOAT:
@@ -52,6 +53,10 @@ func type2SQLType(t descriptor.FieldDescriptorProto_Type) (st SQLType) {
 		st = SQLType{Varchar, 255}
 	case descriptor.FieldDescriptorProto_TYPE_BYTES:
 		st = SQLType{Text, 0}
+	case descriptor.FieldDescriptorProto_TYPE_MESSAGE:
+		if typeName == ".google.protobuf.Timestamp" {
+			st = SQLType{Timestamp, 0}
+		}
 	default:
 		st = SQLType{Text, 0}
 	}

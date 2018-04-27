@@ -51,7 +51,7 @@ func ParseColumnSignature(field *descriptor.Field) (sqlType SQLType, at Addition
 	column := field.Column
 	sqlType, found := sqlTypeFromTag(column.Options)
 	if !found {
-		sqlType = type2SQLType(*field.FieldDescriptorProto.Type)
+		sqlType = type2SQLType(field.FieldDescriptorProto.GetType(), field.FieldDescriptorProto.GetTypeName())
 
 		size := column.Options.GetSize()
 		if size != 0 {

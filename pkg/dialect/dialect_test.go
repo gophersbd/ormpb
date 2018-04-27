@@ -38,5 +38,5 @@ func TestParseColumnSignature(t *testing.T) {
 	}
 
 	sqlType, _ := ParseColumnSignature(f)
-	assert.Equal(t, type2SQLType(fType).Name, sqlType.Name)
+	assert.Equal(t, type2SQLType(fType, "").Name, sqlType.Name)
 }

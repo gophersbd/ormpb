@@ -32,7 +32,7 @@ func Start() {
 		glog.Fatal(err)
 	}
 
-	g := generator.New(reg)
+	generators := generator.New(reg)
 
 	if err = reg.Load(req); err != nil {
 		writeError(err)
@@ -48,7 +48,7 @@ func Start() {
 		targets = append(targets, f)
 	}
 
-	for _, g := range g {
+	for _, g := range generators {
 		out, err := g.Generate(targets)
 		glog.V(1).Info("Processed code generator request")
 		if err != nil {

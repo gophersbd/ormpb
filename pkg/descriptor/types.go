@@ -54,6 +54,7 @@ type Field struct {
 	Column *Column
 }
 
+// Column wraps Column information
 type Column struct {
 	Options   *protobuf.ColumnOptions
 	Tags      map[string]interface{}

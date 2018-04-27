@@ -1,7 +1,0 @@
-
-CREATE TABLE examples(
-	user_id SERIAL,
-	name VARCHAR(128) PRIMARY KEY,
-	email VARCHAR(255) NOT NULL UNIQUE,
-	point NUMERIC DEFAULT 17.33
-);

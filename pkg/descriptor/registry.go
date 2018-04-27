@@ -10,6 +10,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
+	goGen "github.com/golang/protobuf/protoc-gen-go/generator"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/protobuf"
 )
@@ -109,7 +110,7 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 					Options: new(protobuf.ColumnOptions),
 					Tags:    make(map[string]interface{}),
 				},
-				Name: fd.GetName() + "1",
+				Name: goGen.CamelCase(fd.GetName()),
 			}
 
 			column := field.Column

@@ -46,7 +46,7 @@ type AdditionalType struct {
 	SetConstraint map[Constraint]bool
 }
 
-// ParseFieldStructForDialect return SQLType & AdditionalType
+// ParseColumnSignature return SQLType & AdditionalType
 var ParseColumnSignature = func(field *descriptor.Field, dialect Dialect) (sqlType SQLType, at AdditionalType) {
 	column := field.Column
 	sqlType, found := sqlTypeFromTag(column.Options)

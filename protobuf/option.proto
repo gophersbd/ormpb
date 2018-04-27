@@ -4,24 +4,26 @@ import "google/protobuf/descriptor.proto";
 
 package ormpb.protobuf;
 
+option go_package = "github.com/gophersbd/ormpb/protobuf";
+
 // TODO: (@sadlil) contact authorites to get unique field numbers
 
 // Message Options to Use Table level tags in
 extend google.protobuf.MessageOptions {
-  MessageOptions table = 10000001;
+  TableOptions table = 10000001;
 }
 
 // Field options to specifies orms tags for the field
 extend google.protobuf.FieldOptions {
-  FieldOptions column = 10000002;
+  ColumnOptions column = 10000003;
 }
 
-message MessageOptions {
+message TableOptions {
   // table_name specifies the table name for the message
   string name = 1;
 }
 
-message FieldOptions {
+message ColumnOptions {
   // column_name specifies column name
   string name = 1;
   // type specifies column data type

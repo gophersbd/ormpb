@@ -10,3 +10,21 @@ gen:
     import_path: github.com/gophersbd/ormpb/example/import
     extra_modifiers:
       gophersbd/ormpb/protobuf: github.com/gophersbd/ormpb/protobuf
+  plugins:
+    - name: go
+      type: go
+      output: ../../../
+    - name: orm
+      type: go
+      output: ../../../
+
+# Lint directives.
+lint:
+  ids:
+    - ENUM_NAMES_CAMEL_CASE
+    - ENUM_NAMES_CAPITALIZED
+
+# Format directives.
+format:
+  indent: 2s
+  trim_newline: true

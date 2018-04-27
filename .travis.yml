@@ -6,7 +6,7 @@ matrix:
   include:
     - go: 1.10.1
 
-install:
+before_script:
   - ./hack/scripts/go.sh
   - ./hack/scripts/protoc.sh
   - make tools

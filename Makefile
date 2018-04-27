@@ -26,7 +26,7 @@ dep:
 	glide vc --only-code --no-tests
 
 build: compile
-	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) ./cmd/ormpb
+	CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o bin/$(PROJECT) ./cmd/protoc-gen-orm
 
 gen:
 	@prototool gen protobuf/
@@ -92,3 +92,6 @@ tools:
 cover:
 	@go test -v -covermode=count -coverprofile=coverage.out $(TEST_PKGS)
 	@$(GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $(COVERALLS_TOKEN)
+
+gen-examples:
+	@make -C examples/import

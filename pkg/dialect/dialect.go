@@ -46,8 +46,8 @@ type AdditionalType struct {
 	SetConstraint map[Constraint]bool
 }
 
-// ParseFieldStructForDialect return sqlType & AdditionalType
-var ParseFieldStructForDialect = func(field *descriptor.Field, dialect Dialect) (sqlType sqlType, at AdditionalType) {
+// ParseFieldStructForDialect return SQLType & AdditionalType
+var ParseFieldStructForDialect = func(field *descriptor.Field, dialect Dialect) (sqlType SQLType, at AdditionalType) {
 	sqlType, found := sqlTypeFromTag(field.ColumnOptions)
 	if !found {
 		sqlType = type2SQLType(*field.FieldDescriptorProto.Type)

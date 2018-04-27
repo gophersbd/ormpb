@@ -10,7 +10,6 @@ import (
 	"github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
-	goGen "github.com/golang/protobuf/protoc-gen-go/generator"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/protobuf"
 )
@@ -87,10 +86,10 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 			File:            file,
 			Outers:          outerPath,
 			DescriptorProto: md,
+			TableOptions:    new(protobuf.TableOptions),
 			Index:           i,
 		}
 
-		m.TableOptions = &protobuf.TableOptions{}
 		if md.Options != nil {
 			if proto.HasExtension(md.Options, protobuf.E_Table) {
 				to, _ := proto.GetExtension(md.Options, protobuf.E_Table)
@@ -103,34 +102,36 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 		typeOfcov := cov.Type()
 
 		for _, fd := range md.GetField() {
-
-			filed := &Field{
+			field := &Field{
 				Message:              m,
 				FieldDescriptorProto: fd,
-				ColumnTags:           make(map[string]interface{}),
+				Column: &Column{
+					Options: new(protobuf.ColumnOptions),
+					Tags:    make(map[string]interface{}),
+				},
+				Name: fd.GetName() + "1",
 			}
 
-			filed.ColumnOptions = &protobuf.ColumnOptions{}
+			column := field.Column
+
 			if fd.Options != nil {
 				if proto.HasExtension(fd.Options, protobuf.E_Column) {
 					to, _ := proto.GetExtension(fd.Options, protobuf.E_Column)
-					filed.ColumnOptions = to.(*protobuf.ColumnOptions)
+					column.Options = to.(*protobuf.ColumnOptions)
 
-					tv := *filed.ColumnOptions
+					tv := *column.Options
 					cov := reflect.ValueOf(&tv).Elem()
 
 					for i := 0; i < cov.NumField(); i++ {
 						name := typeOfcov.Field(i).Name
 						value := cov.FieldByName(name).Interface()
-						filed.ColumnTags[name] = value
+						column.Tags[name] = value
 					}
 
 				}
 			}
 
-			filed.Name = goGen.CamelCase(fd.GetName())
-
-			m.Fields = append(m.Fields, filed)
+			m.Fields = append(m.Fields, field)
 		}
 		file.Messages = append(file.Messages, m)
 		r.msgs[m.FQMN()] = m

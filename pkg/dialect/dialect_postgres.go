@@ -14,8 +14,9 @@ func init() {
 	RegisterDialect("postgres", &postgres{})
 }
 
-func (s *postgres) DataTypeOf(field *descriptor.Field) string {
-	var sqlType, at = ParseFieldStructForDialect(field, s)
+// ColumnSignatureOf returns signature of column
+func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
+	var sqlType, at = ParseColumnSignature(field, s)
 
 	switch sqlType.Name {
 	case Int:
@@ -54,11 +55,10 @@ func (s *postgres) DataTypeOf(field *descriptor.Field) string {
 		additionalType = additionalType + " " + "UNIQUE"
 	}
 
-	if field.ColumnOptions != nil {
-		d := field.ColumnOptions.GetDefault()
-		if d != "" {
-			additionalType = additionalType + fmt.Sprintf("DEFAULT %v", d)
-		}
+	options := field.Column.Options
+	d := options.GetDefault()
+	if d != "" {
+		additionalType = additionalType + fmt.Sprintf("DEFAULT %v", d)
 	}
 
 	st := sqlType.Name

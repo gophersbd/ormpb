@@ -42,13 +42,15 @@ func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 				return nil, err
 			}
 			for _, f := range m.Fields {
-				fc := d.DataTypeOf(f)
-				f.ColumnConstraint = fc
-				cn := f.ColumnOptions.GetName()
+				if f.Column == nil {
+					f.Column = &descriptor.Column{}
+				}
+				f.Column.Signature = d.ColumnSignatureOf(f)
+				cn := f.Column.Options.GetName()
 				if cn == "" {
 					cn = f.GetName()
 				}
-				f.ColumnName = cn
+				f.Column.Name = cn
 			}
 
 			mTime := time.Now().Unix()

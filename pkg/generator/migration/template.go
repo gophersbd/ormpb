@@ -54,6 +54,7 @@ func applyTemplateDown(p param) (string, error) {
 	w := bytes.NewBuffer(nil)
 
 	helperTemplate := template.New("migration")
+	helperTemplate = helperTemplate.Funcs(template.FuncMap{"toSnake": ToSnake})
 	helperTemplate = helperTemplate.Funcs(fns)
 
 	migrationDownTemplate := template.Must(helperTemplate.Parse(migrationDownTemplate))
@@ -66,13 +67,13 @@ func applyTemplateDown(p param) (string, error) {
 
 var (
 	migrationUpTemplate = `
-CREATE TABLE {{ .TableOptions.GetName }}(
+CREATE TABLE {{ .TableOptions.GetName | toSnake }}(
 {{- range $i, $f := .Fields }}
-	{{ $f.ColumnName | toSnake }} {{ $f.ColumnConstraint }}{{if not_last $i $.Fields}},{{end}}
+	{{ $f.Column.Name | toSnake }} {{ $f.Column.Signature }}{{if not_last $i $.Fields}},{{end}}
 {{- end }}
 );
 `
 	migrationDownTemplate = `
-DROP TABLE IF EXISTS {{ .TableOptions.GetName }};
+DROP TABLE IF EXISTS {{ .TableOptions.GetName | toSnake }};
 `
 )

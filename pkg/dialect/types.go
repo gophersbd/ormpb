@@ -60,14 +60,10 @@ func type2SQLType(t descriptor.FieldDescriptorProto_Type) (st SQLType) {
 
 // sqlTypeFromTag return SQLType from Tag
 func sqlTypeFromTag(options *protobuf.ColumnOptions) (st SQLType, set bool) {
-	if options == nil {
-		return SQLType{}, false
-	}
-
 	t := options.GetType()
 	if t != "" {
 		return SQLType{
-			options.GetType(),
+			t,
 			int(options.GetSize()),
 		}, true
 	}

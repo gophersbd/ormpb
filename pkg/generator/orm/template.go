@@ -56,7 +56,7 @@ var (
 	_{{ $msg.Name }}TagMap = map[string]map[string]string{
 		{{- range $f := $msg.Fields }}
 		"{{ $f.Name }}": {
-			{{- range $key, $value := $f.ColumnTags }}
+			{{- range $key, $value := $f.Column.Tags }}
 				{{- if $value }}
 					runtime.ColumnTag{{ $key }}: {{ $value | printInterface }},
 				{{- end }}

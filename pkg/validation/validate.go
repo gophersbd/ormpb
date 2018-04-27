@@ -1,4 +1,4 @@
-package validator
+package validation
 
 import (
 	"fmt"
@@ -16,16 +16,10 @@ func ValidateTableOptions(m *descriptor.Message) error {
 	if m.TableOptions.GetName() == "" {
 		return fmt.Errorf(`option "(ormpb.protobuf.table).name" is not set in message "%s"`, m.GetName())
 	}
-
-	for _, f := range m.Fields {
-		if err := ValidateColumnOptions(f); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
 // ValidateColumnOptions validates ColumnOptions of a field
-func ValidateColumnOptions(f *descriptor.Field) error {
+func ValidateColumnOptions(_ []*descriptor.Field) error {
 	return nil
 }

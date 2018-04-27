@@ -13,12 +13,14 @@ import (
 )
 
 func main() {
+	Start()
+}
+
+func init() {
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
 	// Convinces goflags that we have called Parse() to avoid noisy logs.
 	_ = flag.CommandLine.Parse([]string{})
-
-	Start()
 }
 
 // Start starts running the ormpb generator
@@ -33,7 +35,7 @@ func Start() {
 	g := generator.New(reg)
 
 	if err = reg.Load(req); err != nil {
-		emitError(err)
+		writeError(err)
 		return
 	}
 
@@ -49,21 +51,21 @@ func Start() {
 	out, err := g.Generate(targets)
 	glog.V(1).Info("Processed code generator request")
 	if err != nil {
-		emitError(err)
+		writeError(err)
 		return
 	}
-	emitFiles(out)
+	writeFiles(out)
 }
 
-func emitFiles(out []*plugin.CodeGeneratorResponse_File) {
-	emitResp(&plugin.CodeGeneratorResponse{File: out})
+func writeFiles(out []*plugin.CodeGeneratorResponse_File) {
+	writeResp(&plugin.CodeGeneratorResponse{File: out})
 }
 
-func emitError(err error) {
-	emitResp(&plugin.CodeGeneratorResponse{Error: proto.String(err.Error())})
+func writeError(err error) {
+	writeResp(&plugin.CodeGeneratorResponse{Error: proto.String(err.Error())})
 }
 
-func emitResp(resp *plugin.CodeGeneratorResponse) {
+func writeResp(resp *plugin.CodeGeneratorResponse) {
 	buf, err := proto.Marshal(resp)
 	if err != nil {
 		glog.Fatal(err)

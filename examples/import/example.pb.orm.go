@@ -13,10 +13,20 @@ func (*Example) TableName() string {
 
 var (
 	_ExampleTagMap = map[string]map[string]string{
+		"UserId": {
+			runtime.ColumnTagAutoIncrement: "true",
+		},
 		"Name": {
 			runtime.ColumnTagName:       "name",
 			runtime.ColumnTagPrimaryKey: "true",
 			runtime.ColumnTagSize:       "128",
+		},
+		"Email": {
+			runtime.ColumnTagNotNull: "true",
+			runtime.ColumnTagUnique:  "true",
+		},
+		"Point": {
+			runtime.ColumnTagDefault: "17.33",
 		},
 	}
 )

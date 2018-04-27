@@ -27,6 +27,7 @@ func TestValidateTableOptions(t *testing.T) {
 	}
 	m.TableOptions = &protobuf.TableOptions{
 		Name: "examples",
+		Type: "postgres",
 	}
 	err = ValidateTableOptions(m)
 	if err != nil {

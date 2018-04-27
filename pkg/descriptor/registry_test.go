@@ -166,7 +166,7 @@ func TestExtension(t *testing.T) {
 		message_type <
 			name: 'Example'
 			options <
-				[ormpb.protobuf.table] < name : "examples" >
+				[ormpb.protobuf.table] < name : "examples", type: "postgres" >
 			>
 			field <
 				name: 'label'

@@ -16,6 +16,9 @@ func ValidateTableOptions(m *descriptor.Message) error {
 	if m.TableOptions.GetName() == "" {
 		return fmt.Errorf(`option "(ormpb.protobuf.table).name" is not set in message "%s"`, m.GetName())
 	}
+	if m.TableOptions.GetType() == "" {
+		return fmt.Errorf(`option "(ormpb.protobuf.table).type" is not set in message "%s"`, m.GetName())
+	}
 	return nil
 }
 

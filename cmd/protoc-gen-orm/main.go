@@ -48,13 +48,16 @@ func Start() {
 		targets = append(targets, f)
 	}
 
-	out, err := g.Generate(targets)
-	glog.V(1).Info("Processed code generator request")
-	if err != nil {
-		writeError(err)
-		return
+	for _, g := range g {
+		out, err := g.Generate(targets)
+		glog.V(1).Info("Processed code generator request")
+		if err != nil {
+			writeError(err)
+			return
+		}
+		writeFiles(out)
 	}
-	writeFiles(out)
+
 }
 
 func writeFiles(out []*plugin.CodeGeneratorResponse_File) {

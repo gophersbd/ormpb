@@ -50,9 +50,11 @@ type Field struct {
 	// Message is the message type which this field belongs to.
 	Message *Message
 	*descriptor.FieldDescriptorProto
-	Name          string
-	ColumnOptions *protobuf.ColumnOptions
-	ColumnTags    map[string]interface{}
+	Name             string
+	ColumnOptions    *protobuf.ColumnOptions
+	ColumnTags       map[string]interface{}
+	ColumnConstraint string
+	ColumnName       string
 }
 
 // FQMN return register name

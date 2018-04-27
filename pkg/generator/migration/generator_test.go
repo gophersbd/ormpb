@@ -1,4 +1,4 @@
-package generator
+package migration
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 )
 
-func TestNew(t *testing.T) {
+func TestLoadFile(t *testing.T) {
 	reg := descriptor.NewRegistry()
 	src := `
 		file_to_generate: 'example.proto'
@@ -44,9 +44,9 @@ func TestNew(t *testing.T) {
 		return
 	}
 
-	g := New(reg)
-
-	if len(g) != 2 {
-		t.Errorf("want %v generator, get %v", 2, len(g))
+	g := NewGenerator(reg)
+	_, err = g.Generate([]*descriptor.File{file})
+	if err != nil {
+		t.Fatalf("Generate File failed with %v; want success", err)
 	}
 }

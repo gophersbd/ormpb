@@ -1,6 +1,9 @@
-package generator
+package orm
 
 import (
+	"fmt"
+	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
@@ -8,7 +11,7 @@ import (
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 )
 
-func TestNew(t *testing.T) {
+func TestLoadFile(t *testing.T) {
 	reg := descriptor.NewRegistry()
 	src := `
 		file_to_generate: 'example.proto'
@@ -44,9 +47,21 @@ func TestNew(t *testing.T) {
 		return
 	}
 
-	g := New(reg)
+	g := NewGenerator(reg)
+	generatedFiles, err := g.Generate([]*descriptor.File{file})
+	if err != nil {
+		t.Fatalf("Generate File failed with %v; want success", err)
+	}
 
-	if len(g) != 2 {
-		t.Errorf("want %v generator, get %v", 2, len(g))
+	name := file.GetName()
+	if file.GoPkg.Path != "" {
+		name = fmt.Sprintf("%s/%s", file.GoPkg.Path, filepath.Base(name))
+	}
+	ext := filepath.Ext(name)
+	base := strings.TrimSuffix(name, ext)
+	output := fmt.Sprintf("%s.pb.orm.go", base)
+
+	if got, want := generatedFiles[0].GetName(), output; want != got {
+		t.Errorf("generated file name = %v; want %v", got, want)
 	}
 }

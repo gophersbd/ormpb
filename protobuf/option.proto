@@ -21,6 +21,7 @@ extend google.protobuf.FieldOptions {
 message TableOptions {
   // table_name specifies the table name for the message
   string name = 1;
+  string type = 2;
 }
 
 message ColumnOptions {

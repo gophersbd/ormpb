@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"os"
 
 	"github.com/golang/glog"
@@ -9,28 +8,21 @@ import (
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 	"github.com/gophersbd/ormpb/pkg/generator"
-	"github.com/spf13/pflag"
 )
 
 func main() {
 	Start()
 }
 
-func init() {
-	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
-	pflag.Parse()
-	// Convinces goflags that we have called Parse() to avoid noisy logs.
-	_ = flag.CommandLine.Parse([]string{})
-}
-
 // Start starts running the ormpb generator
 func Start() {
-	reg := descriptor.NewRegistry()
-
 	req, err := generator.ParseRequest(os.Stdin)
 	if err != nil {
 		glog.Fatal(err)
 	}
+
+	reg := descriptor.NewRegistry()
+	reg.CommandLineParameters(req.GetParameter())
 
 	generators := generator.New(reg)
 

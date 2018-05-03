@@ -1,7 +1,8 @@
 package dialect
 
-import "testing"
 import (
+	"testing"
+
 	protod "github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 	"github.com/gophersbd/ormpb/protobuf"
@@ -10,7 +11,8 @@ import (
 
 func TestPostgres_ColumnSignatureOf(t *testing.T) {
 
-	RegisterDialect("postgres", &postgres{})
+	_, err := NewDialect("pg")
+	assert.Nil(t, err)
 
 	d, err := NewDialect("postgres")
 	assert.Nil(t, err)

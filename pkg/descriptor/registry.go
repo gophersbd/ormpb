@@ -15,8 +15,15 @@ import (
 	"github.com/gophersbd/ormpb/protobuf"
 )
 
+// Option is used for user-provided flags
+type Option struct {
+	MigrationDir string
+}
+
 // Registry is a registry of information extracted from plugin.CodeGeneratorRequest.
 type Registry struct {
+	// User provided option
+	option *Option
 	// msgs is a mapping from fully-qualified message name to descriptor
 	msgs map[string]*Message
 
@@ -36,9 +43,34 @@ type Registry struct {
 // NewRegistry returns a new Registry.
 func NewRegistry() *Registry {
 	return &Registry{
-		msgs:  make(map[string]*Message),
-		files: make(map[string]*File),
+		option: new(Option),
+		msgs:   make(map[string]*Message),
+		files:  make(map[string]*File),
 	}
+}
+
+// CommandLineParameters breaks the comma-separated list of key=value pairs
+// and sets in Option
+func (r *Registry) CommandLineParameters(parameter string) {
+	params := make(map[string]string)
+	for _, p := range strings.Split(parameter, ",") {
+		if i := strings.Index(p, "="); i < 0 {
+			params[p] = ""
+		} else {
+			params[p[0:i]] = p[i+1:]
+		}
+	}
+
+	opts := new(Option)
+
+	for k, v := range params {
+		switch k {
+		case "migrations":
+			opts.MigrationDir = v
+		}
+	}
+
+	r.option = opts
 }
 
 // Load loads definitions of services, methods, messages, enumerations and fields from "req".
@@ -75,6 +107,9 @@ func (r *Registry) loadFile(file *descriptor.FileDescriptorProto) {
 	f := &File{
 		FileDescriptorProto: file,
 		GoPkg:               pkg,
+	}
+	if r.option != nil {
+		f.MigrationDir = r.option.MigrationDir
 	}
 
 	r.files[file.GetName()] = f

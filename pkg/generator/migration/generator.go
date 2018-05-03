@@ -2,6 +2,8 @@ package migration
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/golang/glog"
@@ -23,10 +25,29 @@ func NewGenerator(reg *descriptor.Registry) common.Generator {
 }
 
 func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGeneratorResponse_File, error) {
+	mTime := time.Now().Format("20060102")
+
 	var files []*plugin.CodeGeneratorResponse_File
 	for _, file := range targets {
 
+		if file.MigrationDir == "" {
+			continue
+		}
+
+		comment, err := applyTemplateComment(file)
+		if err != nil {
+			return nil, err
+		}
+
+		upMigration := []string{
+			comment,
+		}
+		downMigration := []string{
+			comment,
+		}
+
 		for _, m := range file.Messages {
+
 			if err := validation.ValidateTableOptions(m); err != nil {
 				return nil, err
 			}
@@ -35,7 +56,6 @@ func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 				return nil, err
 			}
 
-			msgName := m.TableOptions.GetName()
 			dbType := m.TableOptions.GetType()
 			d, err := dialect.NewDialect(dbType)
 			if err != nil {
@@ -53,44 +73,36 @@ func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 				f.Column.Name = cn
 			}
 
-			mTime := time.Now().Unix()
-
-			{
-				code, err := g.generateUp(m)
-				if err != nil {
-					return nil, err
-				}
-
-				fileName := file.GetName()
-				if file.GoPkg.Path != "" {
-					fileName = fmt.Sprintf("%s/%s", file.GoPkg.Path, fmt.Sprintf("%d_%s_up.sql", mTime, msgName))
-				}
-
-				files = append(files, &plugin.CodeGeneratorResponse_File{
-					Name:    proto.String(fileName),
-					Content: proto.String(code),
-				})
-				glog.V(1).Infof("Will emit %s", fileName)
+			generatedUpSQL, err := g.generateUp(m)
+			if err != nil {
+				return nil, err
 			}
+			upMigration = append(upMigration, generatedUpSQL)
 
-			{
-				code, err := g.generateDown(m)
-				if err != nil {
-					return nil, err
-				}
-
-				fileName := file.GetName()
-				if file.GoPkg.Path != "" {
-					fileName = fmt.Sprintf("%s/%s", file.GoPkg.Path, fmt.Sprintf("%d_%s_down.sql", mTime, msgName))
-				}
-
-				files = append(files, &plugin.CodeGeneratorResponse_File{
-					Name:    proto.String(fileName),
-					Content: proto.String(code),
-				})
-				glog.V(1).Infof("Will emit %s", fileName)
+			generatedDownSQL, err := g.generateDown(m)
+			if err != nil {
+				return nil, err
 			}
+			downMigration = append(downMigration, generatedDownSQL)
+
 		}
+
+		fileName := filepath.Base(file.GetName())
+		ext := filepath.Ext(fileName)
+		name := fileName[0 : len(fileName)-len(ext)]
+
+		files = append(files, &plugin.CodeGeneratorResponse_File{
+			Name:    proto.String(fmt.Sprintf("%s/%s", file.MigrationDir, fmt.Sprintf("%s_%s_up.sql", mTime, name))),
+			Content: proto.String(strings.Join(upMigration, "\n\n")),
+		})
+		glog.V(1).Infof("Will emit %s", fileName)
+
+		files = append(files, &plugin.CodeGeneratorResponse_File{
+			Name:    proto.String(fmt.Sprintf("%s/%s", file.MigrationDir, fmt.Sprintf("%s_%s_down.sql", mTime, name))),
+			Content: proto.String(strings.Join(downMigration, "\n\n")),
+		})
+		glog.V(1).Infof("Will emit %s", fileName)
+
 	}
 	return files, nil
 }

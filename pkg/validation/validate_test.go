@@ -33,9 +33,7 @@ func TestValidateTableOptions(t *testing.T) {
 		Type: "postgres",
 	}
 	err = ValidateTableOptions(m)
-	if err != nil {
-		t.Error("Validating TableOptions should not fail.")
-	}
+	assert.Nil(t, err)
 }
 
 func TestValidateColumnOptions(t *testing.T) {

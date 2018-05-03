@@ -12,6 +12,7 @@ type postgres struct {
 
 func init() {
 	RegisterDialect("postgres", &postgres{})
+	RegisterDialect("pg", &postgres{})
 }
 
 // ColumnSignatureOf returns signature of column

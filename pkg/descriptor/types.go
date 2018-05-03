@@ -29,6 +29,8 @@ type File struct {
 	GoPkg GoPackage
 	// Messages is the list of messages defined in this file.
 	Messages []*Message
+	// Migration files directory
+	MigrationDir string
 }
 
 // Message describes a protocol buffer message types

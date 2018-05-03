@@ -6,6 +6,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLoadFile(t *testing.T) {
@@ -28,25 +29,18 @@ func TestLoadFile(t *testing.T) {
 	`
 
 	var req plugin.CodeGeneratorRequest
-	if err := proto.UnmarshalText(src, &req); err != nil {
-		t.Fatalf("proto.UnmarshalText(%s, &file) failed with %v; want success", src, err)
-	}
-	if err := reg.Load(&req); err != nil {
-		t.Fatalf("Load CodeGeneratorRequest failed with %v; want success", err)
-	}
+	err := proto.UnmarshalText(src, &req)
+	assert.Nil(t, err)
+
+	reg.CommandLineParameters("migrations=.")
+	err = reg.Load(&req)
+	assert.Nil(t, err)
 
 	file, err := reg.LookupFile("example.proto")
-	if err != nil {
-		t.Fatalf("Load File failed with %v; want success", err)
-	}
-	if file == nil {
-		t.Errorf("reg.files[%q] = nil; want non-nil", "example.proto")
-		return
-	}
+	assert.Nil(t, err)
+	assert.NotNil(t, file)
 
 	g := NewGenerator(reg)
 	_, err = g.Generate([]*descriptor.File{file})
-	if err != nil {
-		t.Fatalf("Generate File failed with %v; want success", err)
-	}
+	assert.Nil(t, err)
 }

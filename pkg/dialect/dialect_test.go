@@ -13,7 +13,7 @@ func TestNewDialect(t *testing.T) {
 	RegisterDialect("postgres", &postgres{})
 
 	_, err := NewDialect("pg")
-	assert.NotNil(t, err)
+	assert.Nil(t, err)
 
 	_, err = NewDialect("postgres")
 	assert.Nil(t, err)

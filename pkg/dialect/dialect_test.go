@@ -17,6 +17,9 @@ func TestNewDialect(t *testing.T) {
 
 	_, err = NewDialect("postgres")
 	assert.Nil(t, err)
+
+	_, err = NewDialect("mdb")
+	assert.NotNil(t, err)
 }
 
 func TestParseColumnSignature(t *testing.T) {

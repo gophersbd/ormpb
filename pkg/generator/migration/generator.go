@@ -11,20 +11,21 @@ import (
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 	"github.com/gophersbd/ormpb/pkg/dialect"
-	"github.com/gophersbd/ormpb/pkg/generator/common"
 	"github.com/gophersbd/ormpb/pkg/validation"
 )
 
-type generator struct {
+// Generator holds Registry
+type Generator struct {
 	reg *descriptor.Registry
 }
 
 // NewGenerator return Generator interface
-func NewGenerator(reg *descriptor.Registry) common.Generator {
-	return &generator{reg: reg}
+func NewGenerator(reg *descriptor.Registry) *Generator {
+	return &Generator{reg: reg}
 }
 
-func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGeneratorResponse_File, error) {
+// Generate receives target files and returns generated migration files
+func (g *Generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGeneratorResponse_File, error) {
 	mTime := time.Now().Format("20060102")
 
 	var files []*plugin.CodeGeneratorResponse_File
@@ -107,10 +108,10 @@ func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 	return files, nil
 }
 
-func (g *generator) generateUp(msg *descriptor.Message) (string, error) {
+func (g *Generator) generateUp(msg *descriptor.Message) (string, error) {
 	return applyTemplateUp(param{Message: msg})
 }
 
-func (g *generator) generateDown(msg *descriptor.Message) (string, error) {
+func (g *Generator) generateDown(msg *descriptor.Message) (string, error) {
 	return applyTemplateDown(param{Message: msg})
 }

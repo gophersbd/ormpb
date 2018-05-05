@@ -11,17 +11,17 @@ import (
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
-	"github.com/gophersbd/ormpb/pkg/generator/common"
 	"github.com/gophersbd/ormpb/pkg/validation"
 )
 
-type generator struct {
+// Generator holds Registry
+type Generator struct {
 	reg         *descriptor.Registry
 	baseImports []descriptor.GoPackage
 }
 
 // NewGenerator return Generator interface
-func NewGenerator(reg *descriptor.Registry) common.Generator {
+func NewGenerator(reg *descriptor.Registry) *Generator {
 	var imports []descriptor.GoPackage
 	for _, pkgpath := range []string{
 		"github.com/gophersbd/ormpb/pkg/runtime",
@@ -33,10 +33,11 @@ func NewGenerator(reg *descriptor.Registry) common.Generator {
 
 		imports = append(imports, pkg)
 	}
-	return &generator{reg: reg, baseImports: imports}
+	return &Generator{reg: reg, baseImports: imports}
 }
 
-func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGeneratorResponse_File, error) {
+// Generate receives target files and returns generated code files
+func (g *Generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGeneratorResponse_File, error) {
 	var files []*plugin.CodeGeneratorResponse_File
 	for _, file := range targets {
 
@@ -76,7 +77,7 @@ func (g *generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 	return files, nil
 }
 
-func (g *generator) generate(file *descriptor.File) (string, error) {
+func (g *Generator) generate(file *descriptor.File) (string, error) {
 	pkgSeen := make(map[string]bool)
 	var imports []descriptor.GoPackage
 	for _, pkg := range g.baseImports {

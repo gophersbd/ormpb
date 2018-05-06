@@ -63,7 +63,7 @@ func type2SQLType(filedType descriptor.FieldDescriptorProto_Type, typeName strin
 	return
 }
 
-// sqlTypeFromded Tag return SQLType from Tag
+// sqlTypeFromTag return SQLType from Tag
 func sqlTypeFromTag(options *protobuf.ColumnOptions) (st SQLType, set bool) {
 	t := options.GetType()
 	if t != "" {

@@ -21,7 +21,6 @@ func ToSnake(in string) string {
 		}
 		out = append(out, unicode.ToLower(runes[i]))
 	}
-
 	return string(out)
 }
 
@@ -39,7 +38,6 @@ func applyTemplateComment(file *descriptor.File) (string, error) {
 	w := bytes.NewBuffer(nil)
 
 	helperTemplate := template.New("comment")
-
 	migrationCommentTemplate := template.Must(helperTemplate.Parse(migrationCommentTemplate))
 
 	if err := migrationCommentTemplate.Execute(w, file); err != nil {
@@ -54,7 +52,6 @@ func applyTemplateUp(p param) (string, error) {
 	helperTemplate := template.New("up")
 	helperTemplate = helperTemplate.Funcs(template.FuncMap{"toSnake": ToSnake})
 	helperTemplate = helperTemplate.Funcs(fns)
-
 	migrationUpTemplate := template.Must(helperTemplate.Parse(migrationUpTemplate))
 
 	if err := migrationUpTemplate.Execute(w, p); err != nil {
@@ -69,7 +66,6 @@ func applyTemplateDown(p param) (string, error) {
 	helperTemplate := template.New("down")
 	helperTemplate = helperTemplate.Funcs(template.FuncMap{"toSnake": ToSnake})
 	helperTemplate = helperTemplate.Funcs(fns)
-
 	migrationDownTemplate := template.Must(helperTemplate.Parse(migrationDownTemplate))
 
 	if err := migrationDownTemplate.Execute(w, p); err != nil {

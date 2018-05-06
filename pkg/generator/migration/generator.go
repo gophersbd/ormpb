@@ -30,7 +30,6 @@ func (g *Generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 
 	var files []*plugin.CodeGeneratorResponse_File
 	for _, file := range targets {
-
 		if file.MigrationDir == "" {
 			continue
 		}
@@ -48,7 +47,6 @@ func (g *Generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 		}
 
 		for _, m := range file.Messages {
-
 			if err := validation.ValidateTableOptions(m); err != nil {
 				return nil, err
 			}
@@ -85,7 +83,6 @@ func (g *Generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 				return nil, err
 			}
 			downMigration = append(downMigration, generatedDownSQL)
-
 		}
 
 		fileName := filepath.Base(file.GetName())
@@ -103,7 +100,6 @@ func (g *Generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 			Content: proto.String(strings.Join(downMigration, "\n\n")),
 		})
 		glog.V(1).Infof("Will emit %s", fileName)
-
 	}
 	return files, nil
 }

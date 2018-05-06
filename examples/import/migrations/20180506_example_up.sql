@@ -15,7 +15,7 @@ CREATE TABLE examples (
 );
 
 
-/* Generated for SecondExample */
-CREATE TABLE second_examples (
+/* Generated for ExampleAutoIncrement */
+CREATE TABLE example_auto_increment (
 	user_id SERIAL
 );

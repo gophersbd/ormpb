@@ -36,19 +36,19 @@ func (*Example) Tag(field, tag string) (val string, found bool) {
 	return
 }
 
-func (*SecondExample) TableName() string {
-	return "second_examples"
+func (*ExampleAutoIncrement) TableName() string {
+	return "example_auto_increment"
 }
 
 var (
-	_SecondExampleTagMap = map[string]map[string]string{
+	_ExampleAutoIncrementTagMap = map[string]map[string]string{
 		"UserId": {
 			runtime.ColumnTagAutoIncrement: "true",
 		},
 	}
 )
 
-func (*SecondExample) Tag(field, tag string) (val string, found bool) {
-	val, found = _SecondExampleTagMap[field][tag]
+func (*ExampleAutoIncrement) Tag(field, tag string) (val string, found bool) {
+	val, found = _ExampleAutoIncrementTagMap[field][tag]
 	return
 }

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 
+	"sync"
+
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 )
 
@@ -13,16 +15,25 @@ type Dialect interface {
 	ColumnSignatureOf(field *descriptor.Field) string
 }
 
-var dialectsMap = map[string]Dialect{}
+var dialectsMap struct {
+	v map[string]Dialect
+	sync.Mutex
+}
+
+func init() {
+	dialectsMap.v = make(map[string]Dialect)
+}
 
 // RegisterDialect register new dialect
 func RegisterDialect(name string, dialect Dialect) {
-	dialectsMap[name] = dialect
+	dialectsMap.Lock()
+	dialectsMap.v[name] = dialect
+	dialectsMap.Unlock()
 }
 
 // NewDialect return registered Dialect
 func NewDialect(name string) (Dialect, error) {
-	value, ok := dialectsMap[name]
+	value, ok := dialectsMap.v[name]
 	if !ok {
 		return nil, fmt.Errorf("dialect not fount for %s", name)
 	}

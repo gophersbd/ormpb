@@ -29,8 +29,8 @@ message Example {
   google.protobuf.Timestamp created_at = 5;
 }
 
-message SecondExample {
-  option (ormpb.protobuf.table).name = "second_examples";
+message ExampleAutoIncrement {
+  option (ormpb.protobuf.table).name = "example_auto_increment";
   option (ormpb.protobuf.table).type = "postgres";
   int32  user_id = 1 [
     (ormpb.protobuf.column).auto_increment = true

@@ -9,5 +9,5 @@
 DROP TABLE IF EXISTS examples;
 
 
-/* Generated for SecondExample */
-DROP TABLE IF EXISTS second_examples;
+/* Generated for ExampleAutoIncrement */
+DROP TABLE IF EXISTS example_auto_increment;

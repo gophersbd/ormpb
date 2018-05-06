@@ -30,7 +30,6 @@ func applyTemplate(p param) (string, error) {
 	helperTemplate := template.New("orm")
 	helperTemplate.Funcs(template.FuncMap{"printInterface": printInterface})
 	helperTemplate = helperTemplate.Funcs(fns)
-
 	ormTemplate := template.Must(helperTemplate.Parse(ormTemplate))
 
 	if err := ormTemplate.Execute(w, p); err != nil {

@@ -3,7 +3,6 @@ package dialect
 import (
 	"fmt"
 	"reflect"
-
 	"sync"
 
 	"github.com/gophersbd/ormpb/pkg/descriptor"

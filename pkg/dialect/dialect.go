@@ -14,25 +14,27 @@ type Dialect interface {
 	ColumnSignatureOf(field *descriptor.Field) string
 }
 
-var dialectsMap struct {
+var dialectsRegistry struct {
 	v map[string]Dialect
 	sync.Mutex
 }
 
 func init() {
-	dialectsMap.v = make(map[string]Dialect)
+	dialectsRegistry.v = make(map[string]Dialect)
 }
 
 // RegisterDialect register new dialect
 func RegisterDialect(name string, dialect Dialect) {
-	dialectsMap.Lock()
-	dialectsMap.v[name] = dialect
-	dialectsMap.Unlock()
+	dialectsRegistry.Lock()
+	dialectsRegistry.v[name] = dialect
+	dialectsRegistry.Unlock()
 }
 
 // NewDialect return registered Dialect
 func NewDialect(name string) (Dialect, error) {
-	value, ok := dialectsMap.v[name]
+	dialectsRegistry.Lock()
+	value, ok := dialectsRegistry.v[name]
+	dialectsRegistry.Unlock()
 	if !ok {
 		return nil, fmt.Errorf("dialect not fount for %s", name)
 	}

@@ -15,8 +15,15 @@ import (
 	"github.com/gophersbd/ormpb/protobuf"
 )
 
+// Option is used for user-provided flags
+type Option struct {
+	MigrationDir string
+}
+
 // Registry is a registry of information extracted from plugin.CodeGeneratorRequest.
 type Registry struct {
+	// User provided option
+	option *Option
 	// msgs is a mapping from fully-qualified message name to descriptor
 	msgs map[string]*Message
 
@@ -36,9 +43,34 @@ type Registry struct {
 // NewRegistry returns a new Registry.
 func NewRegistry() *Registry {
 	return &Registry{
-		msgs:  make(map[string]*Message),
-		files: make(map[string]*File),
+		option: new(Option),
+		msgs:   make(map[string]*Message),
+		files:  make(map[string]*File),
 	}
+}
+
+// CommandLineParameters breaks the comma-separated list of key=value pairs
+// and sets in Option
+func (r *Registry) CommandLineParameters(parameter string) {
+	params := make(map[string]string)
+	for _, p := range strings.Split(parameter, ",") {
+		if i := strings.Index(p, "="); i < 0 {
+			params[p] = ""
+		} else {
+			params[p[0:i]] = p[i+1:]
+		}
+	}
+
+	opts := new(Option)
+
+	for k, v := range params {
+		switch k {
+		case "migrations":
+			opts.MigrationDir = v
+		}
+	}
+
+	r.option = opts
 }
 
 // Load loads definitions of services, methods, messages, enumerations and fields from "req".
@@ -76,6 +108,9 @@ func (r *Registry) loadFile(file *descriptor.FileDescriptorProto) {
 		FileDescriptorProto: file,
 		GoPkg:               pkg,
 	}
+	if r.option != nil {
+		f.MigrationDir = r.option.MigrationDir
+	}
 
 	r.files[file.GetName()] = f
 	r.registerMsg(f, nil, file.GetMessageType())
@@ -87,10 +122,10 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 			File:            file,
 			Outers:          outerPath,
 			DescriptorProto: md,
+			TableOptions:    new(protobuf.TableOptions),
 			Index:           i,
 		}
 
-		m.TableOptions = &protobuf.TableOptions{}
 		if md.Options != nil {
 			if proto.HasExtension(md.Options, protobuf.E_Table) {
 				to, _ := proto.GetExtension(md.Options, protobuf.E_Table)
@@ -103,34 +138,36 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 		typeOfcov := cov.Type()
 
 		for _, fd := range md.GetField() {
-
-			filed := &Field{
+			field := &Field{
 				Message:              m,
 				FieldDescriptorProto: fd,
-				ColumnTags:           make(map[string]interface{}),
+				Column: &Column{
+					Options: new(protobuf.ColumnOptions),
+					Tags:    make(map[string]interface{}),
+				},
+				Name: goGen.CamelCase(fd.GetName()),
 			}
 
-			filed.ColumnOptions = &protobuf.ColumnOptions{}
+			column := field.Column
+
 			if fd.Options != nil {
 				if proto.HasExtension(fd.Options, protobuf.E_Column) {
 					to, _ := proto.GetExtension(fd.Options, protobuf.E_Column)
-					filed.ColumnOptions = to.(*protobuf.ColumnOptions)
+					column.Options = to.(*protobuf.ColumnOptions)
 
-					tv := *filed.ColumnOptions
+					tv := *column.Options
 					cov := reflect.ValueOf(&tv).Elem()
 
 					for i := 0; i < cov.NumField(); i++ {
 						name := typeOfcov.Field(i).Name
 						value := cov.FieldByName(name).Interface()
-						filed.ColumnTags[name] = value
+						column.Tags[name] = value
 					}
 
 				}
 			}
 
-			filed.Name = goGen.CamelCase(fd.GetName())
-
-			m.Fields = append(m.Fields, filed)
+			m.Fields = append(m.Fields, field)
 		}
 		file.Messages = append(file.Messages, m)
 		r.msgs[m.FQMN()] = m

@@ -25,14 +25,15 @@ func init() {
 
 // Start starts running the ormpb generator
 func Start() {
-	reg := descriptor.NewRegistry()
-
 	req, err := generator.ParseRequest(os.Stdin)
 	if err != nil {
 		glog.Fatal(err)
 	}
 
-	g := generator.New(reg)
+	reg := descriptor.NewRegistry()
+	reg.CommandLineParameters(req.GetParameter())
+
+	generators := generator.New(reg)
 
 	if err = reg.Load(req); err != nil {
 		writeError(err)
@@ -48,13 +49,16 @@ func Start() {
 		targets = append(targets, f)
 	}
 
-	out, err := g.Generate(targets)
-	glog.V(1).Info("Processed code generator request")
-	if err != nil {
-		writeError(err)
-		return
+	for _, g := range generators {
+		out, err := g.Generate(targets)
+		glog.V(1).Info("Processed code generator request")
+		if err != nil {
+			writeError(err)
+			return
+		}
+		writeFiles(out)
 	}
-	writeFiles(out)
+
 }
 
 func writeFiles(out []*plugin.CodeGeneratorResponse_File) {

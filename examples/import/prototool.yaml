@@ -16,6 +16,7 @@ gen:
       output: ../../../
     - name: orm
       type: go
+      flags: migrations=ormpb/examples/import/migrations
       output: ../../../
 
 # Lint directives.

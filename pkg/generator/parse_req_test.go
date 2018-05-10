@@ -6,6 +6,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseRequest(t *testing.T) {
@@ -19,16 +20,12 @@ func TestParseRequest(t *testing.T) {
 		>
 	`
 	req := new(plugin.CodeGeneratorRequest)
-	if err := proto.UnmarshalText(src, req); err != nil {
-		t.Fatalf("proto.UnmarshalText(%s, &file) failed with %v; want success", src, err)
-	}
+	err := proto.UnmarshalText(src, req)
+	assert.Nil(t, err)
 
 	data, _ := proto.Marshal(req)
 	s1 := strings.NewReader(string(data))
 
-	_, err := ParseRequest(s1)
-
-	if err != nil {
-		t.Errorf("Failed to read Proto file with error %v", err)
-	}
+	_, err = ParseRequest(s1)
+	assert.Nil(t, err)
 }

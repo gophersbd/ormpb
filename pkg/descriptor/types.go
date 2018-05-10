@@ -29,6 +29,8 @@ type File struct {
 	GoPkg GoPackage
 	// Messages is the list of messages defined in this file.
 	Messages []*Message
+	// Migration files directory
+	MigrationDir string
 }
 
 // Message describes a protocol buffer message types
@@ -50,9 +52,16 @@ type Field struct {
 	// Message is the message type which this field belongs to.
 	Message *Message
 	*descriptor.FieldDescriptorProto
-	Name          string
-	ColumnOptions *protobuf.ColumnOptions
-	ColumnTags    map[string]interface{}
+	Name   string
+	Column *Column
+}
+
+// Column wraps Column information
+type Column struct {
+	Options   *protobuf.ColumnOptions
+	Tags      map[string]interface{}
+	Name      string
+	Signature string
 }
 
 // FQMN return register name

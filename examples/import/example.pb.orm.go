@@ -13,15 +13,42 @@ func (*Example) TableName() string {
 
 var (
 	_ExampleTagMap = map[string]map[string]string{
+		"UserId": {
+			runtime.ColumnTagAutoIncrement: "true",
+		},
 		"Name": {
 			runtime.ColumnTagName:       "name",
 			runtime.ColumnTagPrimaryKey: "true",
 			runtime.ColumnTagSize:       "128",
+		},
+		"Email": {
+			runtime.ColumnTagNotNull: "true",
+			runtime.ColumnTagUnique:  "true",
+		},
+		"Point": {
+			runtime.ColumnTagDefault: "17.33",
 		},
 	}
 )
 
 func (*Example) Tag(field, tag string) (val string, found bool) {
 	val, found = _ExampleTagMap[field][tag]
+	return
+}
+
+func (*ExampleAutoIncrement) TableName() string {
+	return "example_auto_increment"
+}
+
+var (
+	_ExampleAutoIncrementTagMap = map[string]map[string]string{
+		"UserId": {
+			runtime.ColumnTagAutoIncrement: "true",
+		},
+	}
+)
+
+func (*ExampleAutoIncrement) Tag(field, tag string) (val string, found bool) {
+	val, found = _ExampleAutoIncrementTagMap[field][tag]
 	return
 }

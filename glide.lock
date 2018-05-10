@@ -1,27 +1,29 @@
-hash: 6a1651196c9618b09454e46cc7e850d61430761d738d962f6e5541ed58a69a6a
-updated: 2018-04-26T00:00:02.244047112+08:00
+hash: dfd315e31ca855b8217bc1cd393135eb7e40c750ac44378c76a3ebb75f413a73
+updated: 2018-05-06T19:17:33.226060638+06:00
 imports:
 - name: github.com/davecgh/go-spew
-  version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
+  version: 782f4967f2dc4564575ca782fe2d04090b5faca8
   subpackages:
   - spew
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
-  version: 7a211bcf3bce0e3f1d74f9894916e6f116ae83b4
+  version: b4deda0973fb4c70b50d226b1af49f3da59f5265
   subpackages:
   - proto
   - protoc-gen-go/descriptor
   - protoc-gen-go/generator
+  - protoc-gen-go/generator/internal/remap
   - protoc-gen-go/plugin
+  - ptypes/timestamp
 - name: github.com/pmezard/go-difflib
   version: 792786c7400a136282c1664665ae0a8db921c6c2
   subpackages:
   - difflib
 - name: github.com/spf13/pflag
-  version: 583c0c0531f06d5278b7d917446061adc344b5cd
+  version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/stretchr/objx
-  version: 1a9d0bb9f541897e62256577b352fdbc1fb4fd94
+  version: a5cfa15c000af5f09784e5355969ba7eb66ef0de
 - name: github.com/stretchr/testify
   version: 12b6f73e6084dad08a7c6e575284b177ecafbc71
   subpackages:

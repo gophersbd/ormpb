@@ -6,22 +6,21 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
+	"github.com/stretchr/testify/assert"
 )
 
 func loadFile(t *testing.T, reg *Registry, src string) *descriptor.FileDescriptorProto {
 	var file descriptor.FileDescriptorProto
-	if err := proto.UnmarshalText(src, &file); err != nil {
-		t.Fatalf("proto.UnmarshalText(%s, &file) failed with %v; want success", src, err)
-	}
+	err := proto.UnmarshalText(src, &file)
+	assert.Nil(t, err)
 	reg.loadFile(&file)
 	return &file
 }
 
 func load(t *testing.T, reg *Registry, src string) error {
 	var req plugin.CodeGeneratorRequest
-	if err := proto.UnmarshalText(src, &req); err != nil {
-		t.Fatalf("proto.UnmarshalText(%s, &file) failed with %v; want success", src, err)
-	}
+	err := proto.UnmarshalText(src, &req)
+	assert.Nil(t, err)
 	return reg.Load(&req)
 }
 
@@ -43,55 +42,24 @@ func TestLoadFile(t *testing.T) {
 	`)
 
 	file := reg.files["example.proto"]
-	if file == nil {
-		t.Errorf("reg.files[%q] = nil; want non-nil", "example.proto")
-		return
-	}
-	wantPkg := GoPackage{Path: ".", Name: "examples"}
-	if got, want := file.GoPkg, wantPkg; got != want {
-		t.Errorf("file.GoPkg = %#v; want %#v", got, want)
-	}
+	assert.NotNil(t, file)
+	assert.Equal(t, file.GoPkg, GoPackage{Path: ".", Name: "examples"})
 
 	f, err := reg.LookupFile("example.proto")
-	if err != nil {
-		t.Errorf("reg.LookupFile(%q) failed with %v; want success", ".example.Example", err)
-		return
-	}
-	if f.GetName() != "example.proto" {
-		t.Errorf("file.Name = %v; want example.proto", f.GetName())
-	}
+	assert.Nil(t, err)
+
+	assert.Equal(t, f.GetName(), "example.proto")
 
 	msg, err := reg.LookupMsg("", ".example.Example")
-	if err != nil {
-		t.Errorf("reg.LookupMsg(%q, %q)) failed with %v; want success", "", ".example.Example", err)
-		return
-	}
-	if got, want := msg.DescriptorProto, fd.MessageType[0]; got != want {
-		t.Errorf("reg.lookupMsg(%q, %q).DescriptorProto = %#v; want %#v", "", ".example.Example", got, want)
-	}
-
-	if got, want := msg.File, file; got != want {
-		t.Errorf("msg.File = %v; want %v", got, want)
-	}
-
-	if got := msg.Outers; got != nil {
-		t.Errorf("msg.Outers = %v; want %v", got, nil)
-	}
-
-	if got, want := len(msg.Fields), 1; got != want {
-		t.Errorf("len(msg.Fields) = %d; want %d", got, want)
-	} else if got, want := msg.Fields[0].FieldDescriptorProto, fd.MessageType[0].Field[0]; got != want {
-		t.Errorf("msg.Fields[0].FieldDescriptorProto = %v; want %v", got, want)
-	} else if got, want := msg.Fields[0].Message, msg; got != want {
-		t.Errorf("msg.Fields[0].Message = %v; want %v", got, want)
-	}
-
-	if got, want := len(file.Messages), 1; got != want {
-		t.Errorf("file.Meeesages = %#v; want %#v", file.Messages, []*Message{msg})
-	}
-	if got, want := file.Messages[0], msg; got != want {
-		t.Errorf("file.Meeesages[0] = %v; want %v", got, want)
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, msg.DescriptorProto, fd.MessageType[0])
+	assert.Equal(t, msg.File, file)
+	assert.Nil(t, msg.Outers)
+	assert.Equal(t, len(msg.Fields), 1)
+	assert.Equal(t, msg.Fields[0].FieldDescriptorProto, fd.MessageType[0].Field[0])
+	assert.Equal(t, msg.Fields[0].Message, msg)
+	assert.Equal(t, len(file.Messages), 1)
+	assert.Equal(t, file.Messages[0], msg)
 }
 
 func TestLoadFileNestedPackage(t *testing.T) {
@@ -102,14 +70,8 @@ func TestLoadFileNestedPackage(t *testing.T) {
 	`)
 
 	file := reg.files["example.proto"]
-	if file == nil {
-		t.Errorf("reg.files[%q] = nil; want non-nil", "example.proto")
-		return
-	}
-	wantPkg := GoPackage{Path: ".", Name: "ormpb_example"}
-	if got, want := file.GoPkg, wantPkg; got != want {
-		t.Errorf("file.GoPkg = %#v; want %#v", got, want)
-	}
+	assert.NotNil(t, file)
+	assert.Equal(t, file.GoPkg, GoPackage{Path: ".", Name: "ormpb_example"})
 }
 
 func TestLoadWithInconsistentTargetPackage(t *testing.T) {
@@ -148,13 +110,7 @@ func TestLoadWithInconsistentTargetPackage(t *testing.T) {
 	} {
 		reg := NewRegistry()
 		err := load(t, reg, spec.req)
-		if got, want := err == nil, spec.consistent; got != want {
-			if want {
-				t.Errorf("reg.Load(%s) failed with %v; want success", spec.req, err)
-				continue
-			}
-			t.Errorf("reg.Load(%s) succeeded; want an package inconsistency error", spec.req)
-		}
+		assert.NotNil(t, err)
 	}
 }
 
@@ -166,7 +122,7 @@ func TestExtension(t *testing.T) {
 		message_type <
 			name: 'Example'
 			options <
-				[ormpb.protobuf.table] < name : "examples" >
+				[ormpb.protobuf.table] < name : "examples", type: "postgres" >
 			>
 			field <
 				name: 'label'
@@ -179,36 +135,15 @@ func TestExtension(t *testing.T) {
 	`)
 
 	msg, err := reg.LookupMsg("", ".example.Example")
-	if err != nil {
-		t.Errorf("reg.LookupMsg(%q, %q)) failed with %v; want success", "", ".example.Example", err)
-		return
-	}
+	assert.Nil(t, err)
+	assert.NotNil(t, msg.TableOptions)
+	assert.Equal(t, msg.TableOptions.GetName(), "examples")
+	assert.Equal(t, len(msg.Fields), 1)
 
-	if msg.TableOptions == nil {
-		t.Error("failed to parse TableOptions")
-	}
-
-	tableOptions := msg.TableOptions
-	if got, want := tableOptions.GetName(), "examples"; got != want {
-		t.Errorf("failed to parse TableOptions; want %v, got %v", want, got)
-	}
-
-	if len(msg.Fields) != 1 {
-		t.Error("failed to parse Fileds")
-	}
-
-	field := msg.Fields[0]
-	if field.ColumnOptions == nil {
-		t.Error("failed to parse ColumnOptions")
-	}
-
-	columnOption := field.ColumnOptions
-	if got, want := columnOption.GetName(), "labels"; got != want {
-		t.Errorf("failed to parse ColumnOptions; want %v, got %v", want, got)
-	}
-	if got, want := columnOption.GetType(), "blob"; got != want {
-		t.Errorf("failed to parse ColumnOptions; want %v, got %v", want, got)
-	}
+	column := msg.Fields[0].Column
+	assert.NotNil(t, column.Options)
+	assert.Equal(t, column.Options.GetName(), "labels")
+	assert.Equal(t, column.Options.GetType(), "blob")
 }
 
 func TestPathPrefix(t *testing.T) {
@@ -222,23 +157,26 @@ func TestPathPrefix(t *testing.T) {
 	`)
 
 	_, err := reg.LookupMsg("", ".example.Example")
-	if err != nil {
-		t.Errorf("reg.LookupMsg(%q, %q)) failed with %v; want success", "", ".example.Example", err)
-		return
-	}
+	assert.Nil(t, err)
 	_, err = reg.LookupMsg("", "example.Example")
-	if err != nil {
-		t.Errorf("reg.LookupMsg(%q, %q)) failed with %v; want success", "", ".example.Example", err)
-		return
-	}
+	assert.Nil(t, err)
 	_, err = reg.LookupMsg(".example", "Example")
-	if err != nil {
-		t.Errorf("reg.LookupMsg(%q, %q)) failed with %v; want success", "", ".example.Example", err)
-		return
-	}
+	assert.Nil(t, err)
 	_, err = reg.LookupMsg("example", "Example")
-	if err != nil {
-		t.Errorf("reg.LookupMsg(%q, %q)) failed with %v; want success", "", ".example.Example", err)
-		return
-	}
+	assert.Nil(t, err)
+}
+
+func TestCommandLineParameters(t *testing.T) {
+	reg := NewRegistry()
+	reg.CommandLineParameters("migrations=test")
+	loadFile(t, reg, `
+		name: 'example.proto'
+		package: 'example'
+		message_type <
+			name: 'Example'
+		>
+	`)
+	file, err := reg.LookupFile("example.proto")
+	assert.Nil(t, err)
+	assert.Equal(t, file.MigrationDir, "test")
 }

@@ -8,12 +8,9 @@ import (
 
 // Supported Data type
 const (
-	Int       = "INT"
 	BigInt    = "BIGINT"
 	Varchar   = "VARCHAR"
 	Text      = "TEXT"
-	Float     = "FLOAT"
-	Double    = "DOUBLE"
 	Numeric   = "NUMERIC"
 	Bool      = "BOOL"
 	Boolean   = "BOOLEAN"
@@ -28,10 +25,9 @@ func Type2SQLType(field *descriptor.Field) (st dialect.SQLType) {
 	filedType := field.FieldDescriptorProto.GetType()
 	typeName := field.FieldDescriptorProto.GetTypeName()
 	switch filedType {
-	case protod.FieldDescriptorProto_TYPE_DOUBLE:
-		st = dialect.SQLType{Name: Double, DefaultLength: 0}
-	case protod.FieldDescriptorProto_TYPE_FLOAT:
-		st = dialect.SQLType{Name: Float, DefaultLength: 0}
+	case protod.FieldDescriptorProto_TYPE_DOUBLE,
+		protod.FieldDescriptorProto_TYPE_FLOAT:
+		st = dialect.SQLType{Name: Numeric, DefaultLength: 0}
 	case protod.FieldDescriptorProto_TYPE_INT64,
 		protod.FieldDescriptorProto_TYPE_UINT64,
 		protod.FieldDescriptorProto_TYPE_FIXED64,
@@ -43,7 +39,7 @@ func Type2SQLType(field *descriptor.Field) (st dialect.SQLType) {
 		protod.FieldDescriptorProto_TYPE_UINT32,
 		protod.FieldDescriptorProto_TYPE_SFIXED32,
 		protod.FieldDescriptorProto_TYPE_SINT32:
-		st = dialect.SQLType{Name: Int, DefaultLength: 0}
+		st = dialect.SQLType{Name: Integer, DefaultLength: 0}
 	case protod.FieldDescriptorProto_TYPE_BOOL:
 		st = dialect.SQLType{Name: Bool, DefaultLength: 0}
 	case protod.FieldDescriptorProto_TYPE_STRING:

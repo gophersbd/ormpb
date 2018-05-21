@@ -21,20 +21,14 @@ func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
 	var sqlType, at = dialect.ParseColumnSignature(field, Type2SQLType)
 
 	switch sqlType.Name {
-	case Int:
+	case Integer:
 		if at.SetConstraint[dialect.ConstraintAutoIncrement] {
 			sqlType.Name = Serial
-		} else {
-			sqlType.Name = Integer
 		}
 	case BigInt:
 		if at.SetConstraint[dialect.ConstraintAutoIncrement] {
 			sqlType.Name = BigSerial
-		} else {
-			sqlType.Name = BigInt
 		}
-	case Float, Double:
-		sqlType.Name = Numeric
 	case Varchar:
 		size := sqlType.DefaultLength
 		if !(size > 0 && size < 65532) {

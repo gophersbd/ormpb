@@ -15,14 +15,14 @@ func TestType2SQLType(t *testing.T) {
 			Type: &fType,
 		},
 	}
-	assert.Equal(t, Type2SQLType(f).Name, Double)
+	assert.Equal(t, Type2SQLType(f).Name, Numeric)
 
 	fType = protod.FieldDescriptorProto_TYPE_FLOAT
-	assert.Equal(t, Type2SQLType(f).Name, Float)
+	assert.Equal(t, Type2SQLType(f).Name, Numeric)
 	fType = protod.FieldDescriptorProto_TYPE_SINT64
 	assert.Equal(t, Type2SQLType(f).Name, BigInt)
 	fType = protod.FieldDescriptorProto_TYPE_SINT32
-	assert.Equal(t, Type2SQLType(f).Name, Int)
+	assert.Equal(t, Type2SQLType(f).Name, Integer)
 	fType = protod.FieldDescriptorProto_TYPE_BOOL
 	assert.Equal(t, Type2SQLType(f).Name, Bool)
 	fType = protod.FieldDescriptorProto_TYPE_STRING

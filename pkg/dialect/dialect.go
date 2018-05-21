@@ -42,13 +42,23 @@ func NewDialect(name string) (Dialect, error) {
 	return dialect, nil
 }
 
+// Constraint for Column
+type Constraint string
+
+// Supported Column Constraint
+const (
+	ConstraintNotNull       Constraint = "NOT_NULL"
+	ConstraintAutoIncrement Constraint = "AUTO_INCREMENT"
+	ConstraintPrimaryKey    Constraint = "PRIMARY_KEY"
+	ConstraintUnique        Constraint = "UNIQUE"
+)
+
 // AdditionalType to know which constraint in added for a column
 type AdditionalType struct {
 	SetConstraint map[Constraint]bool
 }
 
-// ParseColumnSignature takes *descriptor.Field and func(*descriptor.Field) SQLType
-// return SQLType & AdditionalType
+// ParseColumnSignature return SQLType & AdditionalType
 func ParseColumnSignature(field *descriptor.Field, fn func(*descriptor.Field) SQLType) (sqlType SQLType, at AdditionalType) {
 	column := field.Column
 	sqlType, found := sqlTypeFromTag(column.Options)

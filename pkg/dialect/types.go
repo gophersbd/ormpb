@@ -4,17 +4,6 @@ import (
 	"github.com/gophersbd/ormpb/protobuf"
 )
 
-// Constraint for Column
-type Constraint string
-
-// Supported Column Constraint
-const (
-	ConstraintNotNull       Constraint = "NOT_NULL"
-	ConstraintAutoIncrement Constraint = "AUTO_INCREMENT"
-	ConstraintPrimaryKey    Constraint = "PRIMARY_KEY"
-	ConstraintUnique        Constraint = "UNIQUE"
-)
-
 // SQLType for Data type and Data size
 type SQLType struct {
 	Name          string

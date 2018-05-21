@@ -59,11 +59,11 @@ type AdditionalType struct {
 }
 
 // ParseColumnSignature return SQLType & AdditionalType
-func ParseColumnSignature(field *descriptor.Field, fn func(*descriptor.Field) SQLType) (sqlType SQLType, at AdditionalType) {
+func ParseColumnSignature(field *descriptor.Field, type2SQLType func(*descriptor.Field) SQLType) (sqlType SQLType, at AdditionalType) {
 	column := field.Column
 	sqlType, found := sqlTypeFromTag(column.Options)
 	if !found {
-		sqlType = fn(field)
+		sqlType = type2SQLType(field)
 
 		size := column.Options.GetSize()
 		if size != 0 {

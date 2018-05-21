@@ -54,7 +54,7 @@ func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
 	options := field.Column.Options
 	d := options.GetDefault()
 	if d != "" {
-		additionalType = additionalType + fmt.Sprintf("DEFAULT %v", d)
+		additionalType = additionalType + " " + fmt.Sprintf("DEFAULT %v", d)
 	}
 
 	st := sqlType.Name

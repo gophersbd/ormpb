@@ -64,4 +64,13 @@ func TestPostgres_ColumnSignatureOf(t *testing.T) {
 	f.Column.Options.Size = 65533
 	signature = d.ColumnSignatureOf(f)
 	assert.Equal(t, "TEXT PRIMARY KEY NOT NULL UNIQUE", signature)
+
+	f.Column.Options.Default = "TEST"
+	f.Column.Options.Unique = false
+	signature = d.ColumnSignatureOf(f)
+	assert.Equal(t, "TEXT PRIMARY KEY NOT NULL DEFAULT TEST", signature)
+
+	f.Column.Options = nil
+	signature = d.ColumnSignatureOf(f)
+	assert.Equal(t, "VARCHAR(255)", signature)
 }

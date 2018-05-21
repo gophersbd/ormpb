@@ -10,7 +10,7 @@ import (
 
 // Dialect interface contains behaviors that differ across SQL database
 type Dialect interface {
-	// ColumnSignatureOf return column's signature (data type & Constraint)
+	// ColumnSignatureOf return column's signature (data type & constraint)
 	ColumnSignatureOf(field *descriptor.Field) string
 }
 
@@ -53,7 +53,7 @@ const (
 	ConstraintUnique        Constraint = "UNIQUE"
 )
 
-// AdditionalType to know which constraint in added for a column
+// AdditionalType to know which constraint is added for a column
 type AdditionalType struct {
 	SetConstraint map[Constraint]bool
 }

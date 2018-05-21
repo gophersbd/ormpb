@@ -41,3 +41,43 @@ func NewDialect(name string) (Dialect, error) {
 	dialect := reflect.New(reflect.TypeOf(value).Elem()).Interface().(Dialect)
 	return dialect, nil
 }
+
+// AdditionalType to know which constraint in added for a column
+type AdditionalType struct {
+	SetConstraint map[Constraint]bool
+}
+
+// ParseColumnSignature takes *descriptor.Field and func(*descriptor.Field) SQLType
+// return SQLType & AdditionalType
+func ParseColumnSignature(field *descriptor.Field, fn func(*descriptor.Field) SQLType) (sqlType SQLType, at AdditionalType) {
+	column := field.Column
+	sqlType, found := sqlTypeFromTag(column.Options)
+	if !found {
+		sqlType = fn(field)
+
+		size := column.Options.GetSize()
+		if size != 0 {
+			sqlType.DefaultLength = int(size)
+		}
+	}
+
+	at = AdditionalType{
+		SetConstraint: make(map[Constraint]bool),
+	}
+
+	options := column.Options
+	if options.GetNotNull() {
+		at.SetConstraint[ConstraintNotNull] = true
+	}
+	if options.GetAutoIncrement() {
+		at.SetConstraint[ConstraintAutoIncrement] = true
+	}
+	if options.GetPrimaryKey() {
+		at.SetConstraint[ConstraintPrimaryKey] = true
+	}
+	if options.GetUnique() {
+		at.SetConstraint[ConstraintUnique] = true
+	}
+
+	return
+}

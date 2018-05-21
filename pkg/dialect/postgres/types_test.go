@@ -4,17 +4,35 @@ import (
 	"testing"
 
 	protod "github.com/golang/protobuf/protoc-gen-go/descriptor"
+	"github.com/gophersbd/ormpb/pkg/descriptor"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestType2SQLType(t *testing.T) {
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_DOUBLE, "").Name, Double)
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_FLOAT, "").Name, Float)
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_SINT64, "").Name, BigInt)
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_SINT32, "").Name, Int)
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_BOOL, "").Name, Bool)
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_STRING, "").Name, Varchar)
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_BYTES, "").Name, Text)
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_ENUM, "").Name, Text)
-	assert.Equal(t, type2SQLType(protod.FieldDescriptorProto_TYPE_MESSAGE, ".google.protobuf.Timestamp").Name, Timestamp)
+	fType := protod.FieldDescriptorProto_TYPE_DOUBLE
+	f := &descriptor.Field{
+		FieldDescriptorProto: &protod.FieldDescriptorProto{
+			Type: &fType,
+		},
+	}
+	assert.Equal(t, Type2SQLType(f).Name, Double)
+
+	fType = protod.FieldDescriptorProto_TYPE_FLOAT
+	assert.Equal(t, Type2SQLType(f).Name, Float)
+	fType = protod.FieldDescriptorProto_TYPE_SINT64
+	assert.Equal(t, Type2SQLType(f).Name, BigInt)
+	fType = protod.FieldDescriptorProto_TYPE_SINT32
+	assert.Equal(t, Type2SQLType(f).Name, Int)
+	fType = protod.FieldDescriptorProto_TYPE_BOOL
+	assert.Equal(t, Type2SQLType(f).Name, Bool)
+	fType = protod.FieldDescriptorProto_TYPE_STRING
+	assert.Equal(t, Type2SQLType(f).Name, Varchar)
+	fType = protod.FieldDescriptorProto_TYPE_BYTES
+	assert.Equal(t, Type2SQLType(f).Name, Text)
+	fType = protod.FieldDescriptorProto_TYPE_ENUM
+	assert.Equal(t, Type2SQLType(f).Name, Text)
+	fType = protod.FieldDescriptorProto_TYPE_MESSAGE
+	tName := ".google.protobuf.Timestamp"
+	f.TypeName = &tName
+	assert.Equal(t, Type2SQLType(f).Name, Timestamp)
 }

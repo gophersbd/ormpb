@@ -65,25 +65,3 @@ func TestPostgres_ColumnSignatureOf(t *testing.T) {
 	signature = d.ColumnSignatureOf(f)
 	assert.Equal(t, "TEXT PRIMARY KEY NOT NULL UNIQUE", signature)
 }
-
-func TestParseColumnSignature(t *testing.T) {
-	fType := protod.FieldDescriptorProto_TYPE_FLOAT
-	f := &descriptor.Field{
-		FieldDescriptorProto: &protod.FieldDescriptorProto{
-			Type: &fType,
-		},
-		Column: &descriptor.Column{
-			Tags: map[string]interface{}{},
-			Options: &protobuf.ColumnOptions{
-				PrimaryKey:    true,
-				AutoIncrement: true,
-				Unique:        true,
-				NotNull:       true,
-				Size:          128,
-			},
-		},
-	}
-
-	sqlType, _ := parseColumnSignature(f)
-	assert.Equal(t, type2SQLType(fType, "").Name, sqlType.Name)
-}

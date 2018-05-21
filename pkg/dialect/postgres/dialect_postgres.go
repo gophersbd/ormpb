@@ -18,17 +18,17 @@ func init() {
 
 // ColumnSignatureOf returns signature of column
 func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
-	var sqlType, at = parseColumnSignature(field)
+	var sqlType, at = dialect.ParseColumnSignature(field, Type2SQLType)
 
 	switch sqlType.Name {
 	case Int:
-		if at.setConstraint[dialect.ConstraintAutoIncrement] {
+		if at.SetConstraint[dialect.ConstraintAutoIncrement] {
 			sqlType.Name = Serial
 		} else {
 			sqlType.Name = Integer
 		}
 	case BigInt:
-		if at.setConstraint[dialect.ConstraintAutoIncrement] {
+		if at.SetConstraint[dialect.ConstraintAutoIncrement] {
 			sqlType.Name = BigSerial
 		} else {
 			sqlType.Name = BigInt
@@ -45,15 +45,15 @@ func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
 
 	var additionalType string
 
-	if at.setConstraint[dialect.ConstraintPrimaryKey] {
+	if at.SetConstraint[dialect.ConstraintPrimaryKey] {
 		additionalType = additionalType + " " + "PRIMARY KEY"
 	}
 
-	if at.setConstraint[dialect.ConstraintNotNull] {
+	if at.SetConstraint[dialect.ConstraintNotNull] {
 		additionalType = additionalType + " " + "NOT NULL"
 	}
 
-	if at.setConstraint[dialect.ConstraintUnique] {
+	if at.SetConstraint[dialect.ConstraintUnique] {
 		additionalType = additionalType + " " + "UNIQUE"
 	}
 
@@ -74,43 +74,4 @@ func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
 	}
 
 	return fmt.Sprintf("%v %v", st, additionalType)
-}
-
-// additionalType to know which constraint in added for a column
-type additionalType struct {
-	setConstraint map[dialect.Constraint]bool
-}
-
-// parseColumnSignature return SQLType & additionalType
-func parseColumnSignature(field *descriptor.Field) (sqlType dialect.SQLType, at additionalType) {
-	column := field.Column
-	sqlType, found := dialect.SQLTypeFromTag(column.Options)
-	if !found {
-		sqlType = type2SQLType(field.FieldDescriptorProto.GetType(), field.FieldDescriptorProto.GetTypeName())
-
-		size := column.Options.GetSize()
-		if size != 0 {
-			sqlType.DefaultLength = int(size)
-		}
-	}
-
-	at = additionalType{
-		setConstraint: make(map[dialect.Constraint]bool),
-	}
-
-	options := column.Options
-	if options.GetNotNull() {
-		at.setConstraint[dialect.ConstraintNotNull] = true
-	}
-	if options.GetAutoIncrement() {
-		at.setConstraint[dialect.ConstraintAutoIncrement] = true
-	}
-	if options.GetPrimaryKey() {
-		at.setConstraint[dialect.ConstraintPrimaryKey] = true
-	}
-	if options.GetUnique() {
-		at.setConstraint[dialect.ConstraintUnique] = true
-	}
-
-	return
 }

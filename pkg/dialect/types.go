@@ -21,8 +21,8 @@ type SQLType struct {
 	DefaultLength int
 }
 
-// SQLTypeFromTag return SQLType from Tag
-func SQLTypeFromTag(options *protobuf.ColumnOptions) (st SQLType, set bool) {
+// sqlTypeFromTag return SQLType from Tag
+func sqlTypeFromTag(options *protobuf.ColumnOptions) (st SQLType, set bool) {
 	t := options.GetType()
 	if t != "" {
 		return SQLType{

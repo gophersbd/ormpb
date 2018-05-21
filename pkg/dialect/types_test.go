@@ -13,10 +13,10 @@ func TestSQLTypeFromTag(t *testing.T) {
 		Size: 128,
 	}
 
-	_, found := SQLTypeFromTag(co)
+	_, found := sqlTypeFromTag(co)
 	assert.Equal(t, found, true)
 
 	co.Type = ""
-	_, found = SQLTypeFromTag(co)
+	_, found = sqlTypeFromTag(co)
 	assert.Equal(t, found, false)
 }

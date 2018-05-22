@@ -53,17 +53,17 @@ const (
 	ConstraintUnique        Constraint = "UNIQUE"
 )
 
-// AdditionalType to know which Constraint in added for a column
+// AdditionalType to know which constraint is added for a column
 type AdditionalType struct {
 	SetConstraint map[Constraint]bool
 }
 
 // ParseColumnSignature return SQLType & AdditionalType
-func ParseColumnSignature(field *descriptor.Field) (sqlType SQLType, at AdditionalType) {
+func ParseColumnSignature(field *descriptor.Field, type2SQLType func(*descriptor.Field) SQLType) (sqlType SQLType, at AdditionalType) {
 	column := field.Column
 	sqlType, found := sqlTypeFromTag(column.Options)
 	if !found {
-		sqlType = type2SQLType(field.FieldDescriptorProto.GetType(), field.FieldDescriptorProto.GetTypeName())
+		sqlType = type2SQLType(field)
 
 		size := column.Options.GetSize()
 		if size != 0 {

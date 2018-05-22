@@ -9,17 +9,39 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewDialect(t *testing.T) {
-	RegisterDialect("postgres", &postgres{})
+type fake struct {
+}
 
-	_, err := NewDialect("pg")
+func (s *fake) ColumnSignatureOf(field *descriptor.Field) string {
+	return ""
+}
+
+func init() {
+	RegisterDialect("fake", &fake{})
+	RegisterDialect("f", &fake{})
+}
+
+func TestNewDialect(t *testing.T) {
+	RegisterDialect("fake", &fake{})
+
+	_, err := NewDialect("f")
 	assert.Nil(t, err)
 
-	_, err = NewDialect("postgres")
+	_, err = NewDialect("fake")
 	assert.Nil(t, err)
 
 	_, err = NewDialect("mdb")
 	assert.NotNil(t, err)
+}
+
+// Type2SQLType converts Proto type to DB Data type
+func Type2SQLType(field *descriptor.Field) (st SQLType) {
+	filedType := field.FieldDescriptorProto.GetType()
+	switch filedType {
+	case protod.FieldDescriptorProto_TYPE_FLOAT:
+		st = SQLType{Name: "FLOAT", DefaultLength: 0}
+	}
+	return
 }
 
 func TestParseColumnSignature(t *testing.T) {
@@ -40,6 +62,6 @@ func TestParseColumnSignature(t *testing.T) {
 		},
 	}
 
-	sqlType, _ := ParseColumnSignature(f)
-	assert.Equal(t, type2SQLType(fType, "").Name, sqlType.Name)
+	sqlType, _ := ParseColumnSignature(f, Type2SQLType)
+	assert.Equal(t, Type2SQLType(f).Name, sqlType.Name)
 }

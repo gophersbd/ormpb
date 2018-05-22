@@ -1,39 +1,34 @@
-package dialect
+package postgres
 
 import (
 	"fmt"
 	"strings"
 
 	"github.com/gophersbd/ormpb/pkg/descriptor"
+	"github.com/gophersbd/ormpb/pkg/dialect"
 )
 
 type postgres struct {
 }
 
 func init() {
-	RegisterDialect("postgres", &postgres{})
-	RegisterDialect("pg", &postgres{})
+	dialect.RegisterDialect("postgres", &postgres{})
+	dialect.RegisterDialect("pg", &postgres{})
 }
 
 // ColumnSignatureOf returns signature of column
 func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
-	var sqlType, at = ParseColumnSignature(field)
+	var sqlType, at = dialect.ParseColumnSignature(field, Type2SQLType)
 
 	switch sqlType.Name {
-	case Int:
-		if at.SetConstraint[ConstraintAutoIncrement] {
+	case Integer:
+		if at.SetConstraint[dialect.ConstraintAutoIncrement] {
 			sqlType.Name = Serial
-		} else {
-			sqlType.Name = Integer
 		}
 	case BigInt:
-		if at.SetConstraint[ConstraintAutoIncrement] {
+		if at.SetConstraint[dialect.ConstraintAutoIncrement] {
 			sqlType.Name = BigSerial
-		} else {
-			sqlType.Name = BigInt
 		}
-	case Float, Double:
-		sqlType.Name = Numeric
 	case Varchar:
 		size := sqlType.DefaultLength
 		if !(size > 0 && size < 65532) {
@@ -44,22 +39,22 @@ func (s *postgres) ColumnSignatureOf(field *descriptor.Field) string {
 
 	var additionalType string
 
-	if at.SetConstraint[ConstraintPrimaryKey] {
+	if at.SetConstraint[dialect.ConstraintPrimaryKey] {
 		additionalType = additionalType + " " + "PRIMARY KEY"
 	}
 
-	if at.SetConstraint[ConstraintNotNull] {
+	if at.SetConstraint[dialect.ConstraintNotNull] {
 		additionalType = additionalType + " " + "NOT NULL"
 	}
 
-	if at.SetConstraint[ConstraintUnique] {
+	if at.SetConstraint[dialect.ConstraintUnique] {
 		additionalType = additionalType + " " + "UNIQUE"
 	}
 
 	options := field.Column.Options
 	d := options.GetDefault()
 	if d != "" {
-		additionalType = additionalType + fmt.Sprintf("DEFAULT %v", d)
+		additionalType = additionalType + " " + fmt.Sprintf("DEFAULT %v", d)
 	}
 
 	st := sqlType.Name

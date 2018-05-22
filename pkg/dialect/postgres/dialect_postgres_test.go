@@ -1,20 +1,21 @@
-package dialect
+package postgres
 
 import (
 	"testing"
 
 	protod "github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
+	"github.com/gophersbd/ormpb/pkg/dialect"
 	"github.com/gophersbd/ormpb/protobuf"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPostgres_ColumnSignatureOf(t *testing.T) {
 
-	_, err := NewDialect("pg")
+	_, err := dialect.NewDialect("pg")
 	assert.Nil(t, err)
 
-	d, err := NewDialect("postgres")
+	d, err := dialect.NewDialect("postgres")
 	assert.Nil(t, err)
 
 	fType := protod.FieldDescriptorProto_TYPE_FLOAT
@@ -63,4 +64,13 @@ func TestPostgres_ColumnSignatureOf(t *testing.T) {
 	f.Column.Options.Size = 65533
 	signature = d.ColumnSignatureOf(f)
 	assert.Equal(t, "TEXT PRIMARY KEY NOT NULL UNIQUE", signature)
+
+	f.Column.Options.Default = "TEST"
+	f.Column.Options.Unique = false
+	signature = d.ColumnSignatureOf(f)
+	assert.Equal(t, "TEXT PRIMARY KEY NOT NULL DEFAULT TEST", signature)
+
+	f.Column.Options = nil
+	signature = d.ColumnSignatureOf(f)
+	assert.Equal(t, "VARCHAR(255)", signature)
 }

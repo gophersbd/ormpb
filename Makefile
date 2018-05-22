@@ -94,4 +94,5 @@ cover:
 	@$(GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $(COVERALLS_TOKEN)
 
 gen-examples:
-	@make -C examples/import
+	@make -C examples/postgres
+	@make -C examples/mysql

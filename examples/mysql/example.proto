@@ -31,7 +31,7 @@ message Example {
 
 message ExampleAutoIncrement {
   option (ormpb.protobuf.table).name = "example_auto_increment";
-  option (ormpb.protobuf.table).type = "postgres";
+  option (ormpb.protobuf.table).type = "mysql";
   int32  user_id = 1 [
     (ormpb.protobuf.column).auto_increment = true
   ];

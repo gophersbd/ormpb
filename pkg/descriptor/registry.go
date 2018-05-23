@@ -160,6 +160,9 @@ func (r *Registry) registerMsg(file *File, outerPath []string, msgs []*descripto
 
 					for i := 0; i < cov.NumField(); i++ {
 						name := typeOfcov.Field(i).Name
+						if strings.HasPrefix(name, "XXX") {
+							continue
+						}
 						value := cov.FieldByName(name).Interface()
 						column.Tags[name] = value
 					}

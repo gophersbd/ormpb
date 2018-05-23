@@ -60,25 +60,14 @@ func (g *Generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 			if err != nil {
 				return nil, err
 			}
-			for _, f := range m.Fields {
-				if f.Column == nil {
-					f.Column = &descriptor.Column{}
-				}
-				f.Column.Signature = d.ColumnSignatureOf(f)
-				cn := f.Column.Options.GetName()
-				if cn == "" {
-					cn = f.GetName()
-				}
-				f.Column.Name = cn
-			}
 
-			generatedUpSQL, err := g.generateUp(m)
+			generatedUpSQL, err := d.GetUpSQL(m)
 			if err != nil {
 				return nil, err
 			}
 			upMigration = append(upMigration, generatedUpSQL)
 
-			generatedDownSQL, err := g.generateDown(m)
+			generatedDownSQL, err := d.GetDownSQL(m)
 			if err != nil {
 				return nil, err
 			}
@@ -102,12 +91,4 @@ func (g *Generator) Generate(targets []*descriptor.File) ([]*plugin.CodeGenerato
 		glog.V(1).Infof("Will emit %s", fileName)
 	}
 	return files, nil
-}
-
-func (g *Generator) generateUp(msg *descriptor.Message) (string, error) {
-	return applyTemplateUp(param{Message: msg})
-}
-
-func (g *Generator) generateDown(msg *descriptor.Message) (string, error) {
-	return applyTemplateDown(param{Message: msg})
 }

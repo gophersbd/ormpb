@@ -7,7 +7,7 @@ REPO_ROOT = ${GOPATH}/src/github.com/gophersbd
 ROOT = ${REPO_ROOT}/${PROJECT}
 
 LINTER_PKGS = $(shell glide nv)
-LINTER_EXCLUDE = "(^|/)mocks/|(^|/)mock_.*\.go|(^|/)(_)?tests/|(^|/)vendor/|(^|/)example/"
+LINTER_EXCLUDE = "(^|/)mocks/|(^|/)mock_.*\.go|(^|/)(_)?tests/|(^|/)vendor/"
 
 PKGS := $(shell go list ./... | grep -v /vendor | grep -v /tests)
 

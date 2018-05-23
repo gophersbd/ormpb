@@ -8,10 +8,11 @@ import (
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
-	_ "github.com/gophersbd/ormpb/pkg/dialect/mysql"
-	_ "github.com/gophersbd/ormpb/pkg/dialect/postgres"
 	"github.com/gophersbd/ormpb/pkg/generator"
 	"github.com/spf13/pflag"
+
+	_ "github.com/gophersbd/ormpb/pkg/dialect/mysql"
+	_ "github.com/gophersbd/ormpb/pkg/dialect/postgres"
 )
 
 func main() {

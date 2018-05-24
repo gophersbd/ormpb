@@ -4,22 +4,19 @@ import (
 	"testing"
 	"time"
 
-	"database/sql"
-	"fmt"
+	"github.com/gophersbd/ormpb/tests/e2e/helper"
 	_ "github.com/lib/pq"
 	. "github.com/onsi/ginkgo"
 	"github.com/onsi/ginkgo/reporters"
 	. "github.com/onsi/gomega"
-	"os"
 )
 
 const (
-	TIMEOUT     = 20 * time.Minute
-	PostgresURL = "postgres_url"
+	TIMEOUT = 20 * time.Minute
 )
 
 var (
-	postgresClient *sql.DB
+	root *helper.Framework
 )
 
 func TestE2e(t *testing.T) {
@@ -31,12 +28,7 @@ func TestE2e(t *testing.T) {
 }
 
 var _ = BeforeSuite(func() {
-
-	postgresURL, found := os.LookupEnv(PostgresURL)
-	Expect(found).Should(BeTrue())
-
-	connStr := fmt.Sprintf("postgres://postgres@%s/?sslmode=disable", postgresURL)
-	var err error
-	postgresClient, err = sql.Open("postgres", connStr)
+	pgClient, err := helper.GetPostgresClient()
 	Expect(err).ShouldNot(HaveOccurred())
+	root = helper.New(pgClient)
 })

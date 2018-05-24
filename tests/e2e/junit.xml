@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <testsuite name="e2e Suite" tests="2" failures="0" time="0.312898926">
-      <testcase name="PostgresMigration Test For Create with example_up" classname="e2e Suite" time="0.153818575"></testcase>
-      <testcase name="PostgresMigration Test For Delete with example_down" classname="e2e Suite" time="0.158809514"></testcase>
+  <testsuite name="e2e Suite" tests="2" failures="0" time="0.281465776">
+      <testcase name="PostgresMigration Test For Create with example_up" classname="e2e Suite" time="0.138795243"></testcase>
+      <testcase name="PostgresMigration Test For Delete with example_down" classname="e2e Suite" time="0.142392903"></testcase>
   </testsuite>

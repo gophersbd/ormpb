@@ -35,6 +35,11 @@ var _ = Describe("PostgresMigration", func() {
 			Expect(err).ShouldNot(HaveOccurred())
 		})
 
+		AfterEach(func() {
+			_, err := client.Exec(string(downSQL))
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
 		Context("For Create", func() {
 			It("with example_up", func() {
 				_, err := client.Exec(string(upSQL))
@@ -56,11 +61,6 @@ var _ = Describe("PostgresMigration", func() {
 		})
 
 		Context("For Delete", func() {
-			BeforeEach(func() {
-				_, err := client.Exec(string(downSQL))
-				Expect(err).ShouldNot(HaveOccurred())
-			})
-
 			It("with example_down", func() {
 				_, err := client.Exec(string(upSQL))
 				Expect(err).ShouldNot(HaveOccurred())

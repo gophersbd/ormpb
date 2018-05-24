@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <testsuite name="e2e Suite" tests="1" failures="0" time="0.150057664">
+      <testcase name="PostgresMigration Test For Create with example_up" classname="e2e Suite" time="0.149933133"></testcase>
+  </testsuite>

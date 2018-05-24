@@ -15,5 +15,4 @@ script:
   - make check
   - make compile
   - make test
-  - make test-e2e
   - make cover

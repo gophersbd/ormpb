@@ -90,7 +90,7 @@ tools:
 	@go get -u github.com/vektra/mockery
 	@go get -u golang.org/x/tools/cmd/cover
 	@go get -u github.com/mattn/goveralls
-	@go get -u go get -u golang.org/x/vgo
+	@go get -u golang.org/x/vgo
 
 cover:
 	@go test -v -covermode=count -coverprofile=coverage.out $(TEST_PKGS)

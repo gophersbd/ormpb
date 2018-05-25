@@ -71,9 +71,11 @@ $(TEST_TARGETS): test
 
 test:
 	@prototool compile examples
+	@vgo test -timeout $(TEST_TIMEOUT)s $(TEST_ARGS) $(TEST_PKGS)
 	@go test -timeout $(TEST_TIMEOUT)s $(TEST_ARGS) $(TEST_PKGS)
 
 test-e2e:
+	@vgo test ./tests/e2e/...
 	@go test ./tests/e2e/...
 
 clean:
@@ -88,6 +90,7 @@ tools:
 	@go get -u github.com/vektra/mockery
 	@go get -u golang.org/x/tools/cmd/cover
 	@go get -u github.com/mattn/goveralls
+	@go get -u go get -u golang.org/x/vgo
 
 cover:
 	@go test -v -covermode=count -coverprofile=coverage.out $(TEST_PKGS)

@@ -1,5 +1,5 @@
 hash: dfd315e31ca855b8217bc1cd393135eb7e40c750ac44378c76a3ebb75f413a73
-updated: 2018-05-06T19:17:33.226060638+06:00
+updated: 2018-05-27T01:15:53.907781076+06:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 782f4967f2dc4564575ca782fe2d04090b5faca8
@@ -21,13 +21,81 @@ imports:
   subpackages:
   - difflib
 - name: github.com/spf13/pflag
-  version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
+  version: 583c0c0531f06d5278b7d917446061adc344b5cd
 - name: github.com/stretchr/objx
-  version: a5cfa15c000af5f09784e5355969ba7eb66ef0de
+  version: 6667b53588d15f3c8c519f0d1802d282e163381f
 - name: github.com/stretchr/testify
   version: 12b6f73e6084dad08a7c6e575284b177ecafbc71
   subpackages:
   - assert
   - http
   - mock
-testImports: []
+testImports:
+- name: github.com/lib/pq
+  version: 90697d60dd844d5ef6ff15135d0203f65d2f53b8
+  subpackages:
+  - oid
+- name: github.com/onsi/ginkgo
+  version: 11459a886d9cd66b319dac7ef1e917ee221372c9
+  subpackages:
+  - config
+  - internal/codelocation
+  - internal/containernode
+  - internal/failer
+  - internal/leafnodes
+  - internal/remote
+  - internal/spec
+  - internal/spec_iterator
+  - internal/specrunner
+  - internal/suite
+  - internal/testingtproxy
+  - internal/writer
+  - reporters
+  - reporters/stenographer
+  - reporters/stenographer/support/go-colorable
+  - reporters/stenographer/support/go-isatty
+  - types
+- name: github.com/onsi/gomega
+  version: dcabb60a477c2b6f456df65037cb6708210fbb02
+  subpackages:
+  - format
+  - internal/assertion
+  - internal/asyncassertion
+  - internal/oraclematcher
+  - internal/testingtsupport
+  - matchers
+  - matchers/support/goraph/bipartitegraph
+  - matchers/support/goraph/edge
+  - matchers/support/goraph/node
+  - matchers/support/goraph/util
+  - types
+- name: golang.org/x/net
+  version: 1c05540f6879653db88113bc4a2b70aec4bd491f
+  subpackages:
+  - html
+  - html/atom
+  - html/charset
+- name: golang.org/x/sys
+  version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce
+  subpackages:
+  - unix
+- name: golang.org/x/text
+  version: b19bf474d317b857955b12035d2c5acb57ce8b01
+  subpackages:
+  - encoding
+  - encoding/charmap
+  - encoding/htmlindex
+  - encoding/internal
+  - encoding/internal/identifier
+  - encoding/japanese
+  - encoding/korean
+  - encoding/simplifiedchinese
+  - encoding/traditionalchinese
+  - encoding/unicode
+  - internal/tag
+  - internal/utf8internal
+  - language
+  - runes
+  - transform
+- name: gopkg.in/yaml.v2
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77

@@ -74,7 +74,7 @@ test:
 	@vgo test -timeout $(TEST_TIMEOUT)s $(TEST_ARGS) $(TEST_PKGS)
 	@go test -timeout $(TEST_TIMEOUT)s $(TEST_ARGS) $(TEST_PKGS)
 
-test-e2e:
+test-e2e: gen-examples
 	@vgo test ./tests/e2e/...
 	@go test ./tests/e2e/...
 

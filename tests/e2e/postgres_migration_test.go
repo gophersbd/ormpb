@@ -1,12 +1,13 @@
 package e2e
 
 import (
+	"database/sql"
 	"fmt"
 	"io/ioutil"
 	"time"
 
-	"database/sql"
 	"github.com/lib/pq"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -23,9 +24,9 @@ var _ = Describe("PostgresMigration", func() {
 		client = root.PostgresClient
 		mTime = time.Now().Format("20060102")
 		var err error
-		downSQL, err = ioutil.ReadFile(fmt.Sprintf("migration/postgres/%s_example_down.sql", mTime))
+		downSQL, err = ioutil.ReadFile(fmt.Sprintf("../../examples/postgres/migrations/%s_example_down.sql", mTime))
 		Expect(err).ShouldNot(HaveOccurred())
-		upSQL, err = ioutil.ReadFile(fmt.Sprintf("migration/postgres/%s_example_up.sql", mTime))
+		upSQL, err = ioutil.ReadFile(fmt.Sprintf("../../examples/postgres/migrations/%s_example_up.sql", mTime))
 		Expect(err).ShouldNot(HaveOccurred())
 	})
 

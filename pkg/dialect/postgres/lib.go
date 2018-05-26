@@ -7,7 +7,7 @@ import (
 	protod "github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/gophersbd/ormpb/pkg/descriptor"
 	"github.com/gophersbd/ormpb/pkg/dialect"
-	"github.com/gophersbd/ormpb/pkg/dialect/mysql/templates"
+	"github.com/gophersbd/ormpb/pkg/dialect/postgres/templates"
 )
 
 type postgres struct {

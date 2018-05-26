@@ -2,7 +2,7 @@ package mysql
 
 // Supported Data type
 const (
-	Numeric   = "NUMERIC"
+	Double    = "DOUBLE"
 	Int       = "INT"
 	Varchar   = "VARCHAR"
 	Varbinary = "VARBINARY"

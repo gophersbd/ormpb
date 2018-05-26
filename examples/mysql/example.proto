@@ -12,12 +12,12 @@ message Example {
   option (ormpb.protobuf.table).name = "examples";
   option (ormpb.protobuf.table).type = "mysql";
   int32  user_id = 1 [
-    (ormpb.protobuf.column).auto_increment = true
+    (ormpb.protobuf.column).auto_increment = true,
+    (ormpb.protobuf.column).primary_key = true
   ];
   string name = 2 [
     (ormpb.protobuf.column).name = "name",
-    (ormpb.protobuf.column).size = 128,
-    (ormpb.protobuf.column).primary_key = true
+    (ormpb.protobuf.column).size = 128
   ];
   string email = 3 [
     (ormpb.protobuf.column).unique = true,

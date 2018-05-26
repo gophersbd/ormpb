@@ -4,16 +4,6 @@
 */
 
 
-/* Generated for Example */
-CREATE TABLE examples (
-	user_id INT AUTO_INCREMENT,
-	name VARCHAR(128) PRIMARY KEY,
-	email LONGTEXT NOT NULL UNIQUE,
-	point NUMERIC DEFAULT 17.33,
-	created_at TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
 /* Generated for ExampleAutoIncrement */
 CREATE TABLE example_auto_increment (
 	user_id INT AUTO_INCREMENT

@@ -15,11 +15,11 @@ var (
 	_ExampleTagMap = map[string]map[string]string{
 		"UserId": {
 			runtime.ColumnTagAutoIncrement: "true",
+			runtime.ColumnTagPrimaryKey:    "true",
 		},
 		"Name": {
-			runtime.ColumnTagName:       "name",
-			runtime.ColumnTagPrimaryKey: "true",
-			runtime.ColumnTagSize:       "128",
+			runtime.ColumnTagName: "name",
+			runtime.ColumnTagSize: "128",
 		},
 		"Email": {
 			runtime.ColumnTagNotNull: "true",

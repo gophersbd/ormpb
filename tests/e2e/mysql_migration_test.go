@@ -6,13 +6,11 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/lib/pq"
-
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("PostgresMigration", func() {
+var _ = Describe("MySQLMigration", func() {
 	var (
 		client  *sql.DB
 		mTime   string
@@ -21,24 +19,22 @@ var _ = Describe("PostgresMigration", func() {
 	)
 
 	BeforeEach(func() {
-		client = root.PostgresClient
+		client = root.MySQLClient
 		mTime = time.Now().Format("20060102")
 		var err error
-		downSQL, err = ioutil.ReadFile(fmt.Sprintf("../../examples/postgres/migrations/%s_examples_down.sql", mTime))
+		downSQL, err = ioutil.ReadFile(fmt.Sprintf("../../examples/mysql/migrations/%s_examples_down.sql", mTime))
 		Expect(err).ShouldNot(HaveOccurred())
-		upSQL, err = ioutil.ReadFile(fmt.Sprintf("../../examples/postgres/migrations/%s_examples_up.sql", mTime))
+		upSQL, err = ioutil.ReadFile(fmt.Sprintf("../../examples/mysql/migrations/%s_examples_up.sql", mTime))
 		Expect(err).ShouldNot(HaveOccurred())
 	})
 
 	Describe("Test", func() {
 		BeforeEach(func() {
-			_, err := client.Exec(string(downSQL))
-			Expect(err).ShouldNot(HaveOccurred())
+			client.Exec(string(downSQL))
 		})
 
 		AfterEach(func() {
-			_, err := client.Exec(string(downSQL))
-			Expect(err).ShouldNot(HaveOccurred())
+			client.Exec(string(downSQL))
 		})
 
 		Context("For Create", func() {
@@ -46,14 +42,14 @@ var _ = Describe("PostgresMigration", func() {
 				_, err := client.Exec(string(upSQL))
 				Expect(err).ShouldNot(HaveOccurred())
 
-				tableName := pq.QuoteIdentifier("examples")
+				tableName := "examples"
 
-				_, err = client.Exec(fmt.Sprintf("INSERT INTO %s(name, email) VALUES ($1, $2)", tableName), "shahriar", "shahriar052@gmail.com")
+				_, err = client.Exec(fmt.Sprintf("INSERT INTO %s (name, email) VALUES (%s, %s)", tableName, "'shahriar'", "'shahriar052@gmail.com'"))
 				Expect(err).ShouldNot(HaveOccurred())
 
 				var name string
 				var point float64
-				err = client.QueryRow(fmt.Sprintf("SELECT name,point from %s WHERE user_id = $1", tableName), 1).Scan(&name, &point)
+				err = client.QueryRow(fmt.Sprintf("SELECT name,point from %s WHERE user_id = %d", tableName, 1)).Scan(&name, &point)
 				Expect(err).ShouldNot(HaveOccurred())
 
 				Expect(name).Should(Equal("shahriar"))
@@ -66,7 +62,7 @@ var _ = Describe("PostgresMigration", func() {
 				_, err := client.Exec(string(upSQL))
 				Expect(err).ShouldNot(HaveOccurred())
 
-				tableName := pq.QuoteIdentifier("examples")
+				tableName := "examples"
 
 				_, err = client.Query(fmt.Sprintf("SELECT * from %s", tableName))
 				Expect(err).ShouldNot(HaveOccurred())
@@ -75,7 +71,7 @@ var _ = Describe("PostgresMigration", func() {
 				Expect(err).ShouldNot(HaveOccurred())
 
 				_, err = client.Query(fmt.Sprintf("SELECT * from %s", tableName))
-				Expect(err.Error()).Should(HaveSuffix("does not exist"))
+				Expect(err.Error()).Should(HaveSuffix("doesn't exist"))
 			})
 		})
 	})

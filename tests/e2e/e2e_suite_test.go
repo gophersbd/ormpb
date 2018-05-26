@@ -30,5 +30,7 @@ func TestE2e(t *testing.T) {
 var _ = BeforeSuite(func() {
 	pgClient, err := helper.GetPostgresClient()
 	Expect(err).ShouldNot(HaveOccurred())
-	root = helper.New(pgClient)
+	msClient, err := helper.GetMySQLClient()
+	Expect(err).ShouldNot(HaveOccurred())
+	root = helper.New(pgClient, msClient)
 })

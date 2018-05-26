@@ -4,9 +4,7 @@
 */
 
 
-/* Generated for Example */
-DROP TABLE IF EXISTS examples;
-
-
 /* Generated for ExampleAutoIncrement */
-DROP TABLE IF EXISTS example_auto_increment;
+CREATE TABLE example_auto_increment (
+	user_id SERIAL
+);

@@ -109,7 +109,7 @@ func type2SQLType(field *descriptor.Field) (st dialect.SQLType) {
 	switch filedType {
 	case protod.FieldDescriptorProto_TYPE_DOUBLE,
 		protod.FieldDescriptorProto_TYPE_FLOAT:
-		st = dialect.SQLType{Name: Numeric, DefaultLength: 0}
+		st = dialect.SQLType{Name: Double, DefaultLength: 0}
 	case protod.FieldDescriptorProto_TYPE_INT32,
 		protod.FieldDescriptorProto_TYPE_SINT32,
 		protod.FieldDescriptorProto_TYPE_SFIXED32:
@@ -127,7 +127,7 @@ func type2SQLType(field *descriptor.Field) (st dialect.SQLType) {
 	case protod.FieldDescriptorProto_TYPE_BOOL:
 		st = dialect.SQLType{Name: Boolean, DefaultLength: 0}
 	case protod.FieldDescriptorProto_TYPE_STRING:
-		st = dialect.SQLType{Name: Longtext, DefaultLength: 0}
+		st = dialect.SQLType{Name: Longtext, DefaultLength: 512}
 	case protod.FieldDescriptorProto_TYPE_BYTES:
 		st = dialect.SQLType{Name: Longblob, DefaultLength: 0}
 	case protod.FieldDescriptorProto_TYPE_MESSAGE:

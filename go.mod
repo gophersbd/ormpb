@@ -1,6 +1,7 @@
 module github.com/gophersbd/ormpb
 
 require (
+	github.com/go-sql-driver/mysql v1.3.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/protobuf v0.0.0-20180430185241-b4deda0973fb
 	github.com/lib/pq v0.0.0-20180523175426-90697d60dd84

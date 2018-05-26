@@ -12,9 +12,3 @@ CREATE TABLE examples (
 	point NUMERIC DEFAULT 17.33,
 	created_at TIMESTAMP
 );
-
-
-/* Generated for ExampleAutoIncrement */
-CREATE TABLE example_auto_increment (
-	user_id SERIAL
-);

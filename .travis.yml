@@ -14,6 +14,7 @@ before_script:
   - ./hack/scripts/protoc.sh
   - make tools
   - docker --version
+  - docker run -d -p 127.0.0.1:5432:5432 postgres:latest
 
 script:
   - make check

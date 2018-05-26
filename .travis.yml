@@ -2,6 +2,9 @@ language: go
 
 sudo: required
 
+services:
+  - docker
+
 matrix:
   include:
     - go: 1.10.1
@@ -10,6 +13,7 @@ before_script:
   - ./hack/scripts/go.sh
   - ./hack/scripts/protoc.sh
   - make tools
+  - docker --version
 
 script:
   - make check
@@ -17,3 +21,4 @@ script:
   - make test
   - make test-e2e
   - make cover
+

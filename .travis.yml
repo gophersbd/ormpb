@@ -11,7 +11,8 @@ matrix:
 
 before_install:
   - docker pull postgres:latest
-  - docker run -d -p 127.0.0.1:5432:5432 postgres:latest
+  - docker run -d -p 127.0.0.1:15432:5432 postgres:latest
+  - docker ps -a
 
 before_script:
   - ./hack/scripts/go.sh

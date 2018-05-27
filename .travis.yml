@@ -11,8 +11,8 @@ matrix:
 
 before_install:
   - docker pull postgres:latest
-  - docker run -d -p 127.0.0.1:15432:5432 postgres:latest
-  - docker run -d -p 127.0.0.1:13306:3306 -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=test mysql:5.7
+  - docker run -d -p 15432:5432 postgres:latest
+  - docker run -d -p 13306:3306 -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=test mysql:5.7
 
 before_script:
   - ./hack/scripts/go.sh

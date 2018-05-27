@@ -1,10 +1,12 @@
 hash: dfd315e31ca855b8217bc1cd393135eb7e40c750ac44378c76a3ebb75f413a73
-updated: 2018-05-27T01:15:53.907781076+06:00
+updated: 2018-05-27T06:02:25.736443531+06:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 782f4967f2dc4564575ca782fe2d04090b5faca8
   subpackages:
   - spew
+- name: github.com/go-sql-driver/mysql
+  version: 64db0f7ebe171b596aa9b26f39a79f7413a3b617
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
@@ -16,6 +18,10 @@ imports:
   - protoc-gen-go/generator/internal/remap
   - protoc-gen-go/plugin
   - ptypes/timestamp
+- name: github.com/lib/pq
+  version: 90697d60dd844d5ef6ff15135d0203f65d2f53b8
+  subpackages:
+  - oid
 - name: github.com/pmezard/go-difflib
   version: 792786c7400a136282c1664665ae0a8db921c6c2
   subpackages:
@@ -30,11 +36,11 @@ imports:
   - assert
   - http
   - mock
-testImports:
-- name: github.com/lib/pq
-  version: 90697d60dd844d5ef6ff15135d0203f65d2f53b8
+- name: google.golang.org/appengine
+  version: b1f26356af11148e710935ed1ac8a7f5702c7612
   subpackages:
-  - oid
+  - cloudsql
+testImports:
 - name: github.com/onsi/ginkgo
   version: 11459a886d9cd66b319dac7ef1e917ee221372c9
   subpackages:

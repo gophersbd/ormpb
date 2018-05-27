@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <testsuite tests="4" failures="0" time="0.396273599">
-      <testcase name="MySQLMigration Test For Create with example_up" classname="e2e Suite" time="0.151822612"></testcase>
-      <testcase name="MySQLMigration Test For Delete with example_down" classname="e2e Suite" time="0.131425254"></testcase>
-      <testcase name="PostgresMigration Test For Create with example_up" classname="e2e Suite" time="0.059603262"></testcase>
-      <testcase name="PostgresMigration Test For Delete with example_down" classname="e2e Suite" time="0.053187506"></testcase>
+  <testsuite tests="4" failures="0" time="0.458874418">
+      <testcase name="MySQLMigration Test For Create with example_up" classname="e2e Suite" time="0.163229223"></testcase>
+      <testcase name="MySQLMigration Test For Delete with example_down" classname="e2e Suite" time="0.152138915"></testcase>
+      <testcase name="PostgresMigration Test For Create with example_up" classname="e2e Suite" time="0.070293098"></testcase>
+      <testcase name="PostgresMigration Test For Delete with example_down" classname="e2e Suite" time="0.072890947"></testcase>
   </testsuite>

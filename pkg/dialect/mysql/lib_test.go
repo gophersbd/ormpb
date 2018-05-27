@@ -102,7 +102,7 @@ func TestPostgres_ColumnSignatureOf(t *testing.T) {
 	}
 
 	signature := columnSignatureOf(f)
-	assert.Equal(t, "NUMERIC(128) PRIMARY KEY NOT NULL UNIQUE", signature)
+	assert.Equal(t, "DOUBLE(128) PRIMARY KEY NOT NULL UNIQUE", signature)
 
 	fType = protod.FieldDescriptorProto_TYPE_INT32
 	f.FieldDescriptorProto.Type = &fType
@@ -162,10 +162,10 @@ func TestType2SQLType(t *testing.T) {
 			Type: &fType,
 		},
 	}
-	assert.Equal(t, type2SQLType(f).Name, Numeric)
+	assert.Equal(t, type2SQLType(f).Name, Double)
 
 	fType = protod.FieldDescriptorProto_TYPE_FLOAT
-	assert.Equal(t, type2SQLType(f).Name, Numeric)
+	assert.Equal(t, type2SQLType(f).Name, Double)
 	fType = protod.FieldDescriptorProto_TYPE_SFIXED32
 	assert.Equal(t, type2SQLType(f).Name, Int)
 	fType = protod.FieldDescriptorProto_TYPE_SFIXED64

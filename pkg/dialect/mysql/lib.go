@@ -127,7 +127,7 @@ func type2SQLType(field *descriptor.Field) (st dialect.SQLType) {
 	case protod.FieldDescriptorProto_TYPE_BOOL:
 		st = dialect.SQLType{Name: Boolean, DefaultLength: 0}
 	case protod.FieldDescriptorProto_TYPE_STRING:
-		st = dialect.SQLType{Name: Longtext, DefaultLength: 512}
+		st = dialect.SQLType{Name: Longtext, DefaultLength: 255}
 	case protod.FieldDescriptorProto_TYPE_BYTES:
 		st = dialect.SQLType{Name: Longblob, DefaultLength: 0}
 	case protod.FieldDescriptorProto_TYPE_MESSAGE:

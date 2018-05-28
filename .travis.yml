@@ -3,23 +3,21 @@ language: go
 sudo: required
 
 services:
-  - docker
+  - postgresql
+  - mysql
+
 
 matrix:
   include:
     - go: 1.10.1
 
-before_install:
-  - docker pull postgres:latest
-  - docker run -d -p 15432:5432 postgres:latest
-  - docker pull mysql:5.7
-  - docker run -d -p 13306:3306 -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=test mysql:5.7
-
 before_script:
   - ./hack/scripts/go.sh
   - ./hack/scripts/protoc.sh
   - make tools
-  - docker --version
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
 
 script:
   - make check

@@ -7,5 +7,5 @@ import (
 )
 
 func GetMySQLClient() (*sql.DB, error) {
-	return sql.Open("mysql", "root:secret@tcp(127.0.0.1:13306)/test")
+	return sql.Open("mysql", "root@tcp(127.0.0.1:3306)/test")
 }

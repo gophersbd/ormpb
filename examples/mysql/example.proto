@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "ormpb/protobuf/option.proto";
+
+package ormpb.examples.mysql;
+
+option go_package = "importpb";
+option java_package = "com.ormpb.examples.mysql.pb";
+
+message Example {
+  option (ormpb.protobuf.table).name = "examples";
+  option (ormpb.protobuf.table).type = "mysql";
+  int32  user_id = 1 [
+    (ormpb.protobuf.column).auto_increment = true,
+    (ormpb.protobuf.column).primary_key = true
+  ];
+  string name = 2 [
+    (ormpb.protobuf.column).name = "name",
+    (ormpb.protobuf.column).size = 128
+  ];
+  string email = 3 [
+    (ormpb.protobuf.column).unique = true,
+    (ormpb.protobuf.column).not_null = true
+  ];
+  double point = 4 [
+    (ormpb.protobuf.column).default = "17.33"
+  ];
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message ExampleAutoIncrement {
+  option (ormpb.protobuf.table).name = "example_auto_increment";
+  option (ormpb.protobuf.table).type = "mysql";
+  int32  user_id = 1 [
+    (ormpb.protobuf.column).auto_increment = true
+  ];
+}

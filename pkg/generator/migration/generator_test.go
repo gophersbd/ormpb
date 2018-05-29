@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLoadFile(t *testing.T) {
+func TestGenerator_Generate(t *testing.T) {
 	reg := descriptor.NewRegistry()
 	src := `
 		file_to_generate: 'example.proto'

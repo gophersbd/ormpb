@@ -7,7 +7,7 @@ REPO_ROOT = ${GOPATH}/src/github.com/gophersbd
 ROOT = ${REPO_ROOT}/${PROJECT}
 
 LINTER_PKGS = $(shell glide nv)
-LINTER_EXCLUDE = "(^|/)mocks/|(^|/)mock_.*\.go|(^|/)(_)?tests/|(^|/)vendor/|(^|/)example/"
+LINTER_EXCLUDE = "(^|/)mocks/|(^|/)mock_.*\.go|(^|/)(_)?tests/|(^|/)vendor/"
 
 PKGS := $(shell go list ./... | grep -v /vendor | grep -v /tests)
 
@@ -74,7 +74,7 @@ test:
 	@vgo test -timeout $(TEST_TIMEOUT)s $(TEST_ARGS) $(TEST_PKGS)
 	@go test -timeout $(TEST_TIMEOUT)s $(TEST_ARGS) $(TEST_PKGS)
 
-test-e2e:
+test-e2e: gen-examples
 	@vgo test ./tests/e2e/...
 	@go test ./tests/e2e/...
 
@@ -97,4 +97,5 @@ cover:
 	@$(GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $(COVERALLS_TOKEN)
 
 gen-examples:
-	@make -C examples/import
+	@make -C examples/postgres
+	@make -C examples/mysql

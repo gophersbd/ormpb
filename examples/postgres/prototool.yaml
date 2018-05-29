@@ -1,0 +1,31 @@
+protoc_version: 3.5.1
+
+protoc_includes:
+  - ../../../../../github.com/gophersbd
+
+protoc_include_wkt: true
+
+gen:
+  go_options:
+    import_path: github.com/gophersbd/ormpb/example/postgres
+    extra_modifiers:
+      gophersbd/ormpb/protobuf: github.com/gophersbd/ormpb/protobuf
+  plugins:
+    - name: go
+      type: go
+      output: ../../../
+    - name: orm
+      type: go
+      flags: migrations=ormpb/examples/postgres/migrations
+      output: ../../../
+
+# Lint directives.
+lint:
+  ids:
+    - ENUM_NAMES_CAMEL_CASE
+    - ENUM_NAMES_CAPITALIZED
+
+# Format directives.
+format:
+  indent: 2s
+  trim_newline: true

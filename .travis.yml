@@ -2,6 +2,11 @@ language: go
 
 sudo: required
 
+services:
+  - postgresql
+  - mysql
+
+
 matrix:
   include:
     - go: 1.10.1
@@ -10,6 +15,9 @@ before_script:
   - ./hack/scripts/go.sh
   - ./hack/scripts/protoc.sh
   - make tools
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
 
 script:
   - make check

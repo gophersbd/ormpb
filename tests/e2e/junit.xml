@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <testsuite tests="4" failures="0" time="0.418178842">
+      <testcase name="MySQLMigration Test For Create with example_up" classname="e2e Suite" time="0.169371701"></testcase>
+      <testcase name="MySQLMigration Test For Delete with example_down" classname="e2e Suite" time="0.132198653"></testcase>
+      <testcase name="PostgresMigration Test For Create with example_up" classname="e2e Suite" time="0.056031242"></testcase>
+      <testcase name="PostgresMigration Test For Delete with example_down" classname="e2e Suite" time="0.060405742"></testcase>
+  </testsuite>

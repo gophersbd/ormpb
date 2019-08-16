@@ -1,15 +1,20 @@
-protoc_version: 3.5.1
+protoc:
+  version: 3.8.0
+  includes:
+    - ../../../
 
-protoc_includes:
-  - ../../../../../github.com/gophersbd
+lint:
+  group: google
+  rules:
+    add:
+      - ENUM_NAMES_CAMEL_CASE
+      - ENUM_NAMES_CAPITALIZED
 
-protoc_include_wkt: true
-
-gen:
+generate:
   go_options:
-    import_path: github.com/gophersbd/ormpb/example/mysql
+    import_path: mysql
     extra_modifiers:
-      gophersbd/ormpb/protobuf: github.com/gophersbd/ormpb/protobuf
+      gophersbd/ormpb/protobuf: ormpb/protobuf
   plugins:
     - name: go
       type: go
@@ -18,14 +23,3 @@ gen:
       type: go
       flags: migrations=ormpb/examples/mysql/migrations
       output: ../../../
-
-# Lint directives.
-lint:
-  ids:
-    - ENUM_NAMES_CAMEL_CASE
-    - ENUM_NAMES_CAPITALIZED
-
-# Format directives.
-format:
-  indent: 2s
-  trim_newline: true

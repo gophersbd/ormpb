@@ -3,11 +3,13 @@
 
 package importpb
 
-import proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import timestamp "github.com/golang/protobuf/ptypes/timestamp"
-import _ "github.com/gophersbd/ormpb/protobuf"
+import (
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
+	math "math"
+	_ "ormpb/protobuf"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -18,14 +20,14 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type Example struct {
-	UserId               int32                `protobuf:"varint,1,opt,name=user_id,json=userId" json:"user_id,omitempty"`
-	Name                 string               `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
-	Email                string               `protobuf:"bytes,3,opt,name=email" json:"email,omitempty"`
-	Point                float64              `protobuf:"fixed64,4,opt,name=point" json:"point,omitempty"`
-	CreatedAt            *timestamp.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
+	UserId               int32                `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Name                 string               `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Email                string               `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Point                float64              `protobuf:"fixed64,4,opt,name=point,proto3" json:"point,omitempty"`
+	CreatedAt            *timestamp.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`
 	XXX_sizecache        int32                `json:"-"`
@@ -35,16 +37,17 @@ func (m *Example) Reset()         { *m = Example{} }
 func (m *Example) String() string { return proto.CompactTextString(m) }
 func (*Example) ProtoMessage()    {}
 func (*Example) Descriptor() ([]byte, []int) {
-	return fileDescriptor_example_eebe85aef3454405, []int{0}
+	return fileDescriptor_b319b6f29f5406a4, []int{0}
 }
+
 func (m *Example) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Example.Unmarshal(m, b)
 }
 func (m *Example) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Example.Marshal(b, m, deterministic)
 }
-func (dst *Example) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Example.Merge(dst, src)
+func (m *Example) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Example.Merge(m, src)
 }
 func (m *Example) XXX_Size() int {
 	return xxx_messageInfo_Example.Size(m)
@@ -91,7 +94,7 @@ func (m *Example) GetCreatedAt() *timestamp.Timestamp {
 }
 
 type ExampleAutoIncrement struct {
-	UserId               int32    `protobuf:"varint,1,opt,name=user_id,json=userId" json:"user_id,omitempty"`
+	UserId               int32    `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -101,16 +104,17 @@ func (m *ExampleAutoIncrement) Reset()         { *m = ExampleAutoIncrement{} }
 func (m *ExampleAutoIncrement) String() string { return proto.CompactTextString(m) }
 func (*ExampleAutoIncrement) ProtoMessage()    {}
 func (*ExampleAutoIncrement) Descriptor() ([]byte, []int) {
-	return fileDescriptor_example_eebe85aef3454405, []int{1}
+	return fileDescriptor_b319b6f29f5406a4, []int{1}
 }
+
 func (m *ExampleAutoIncrement) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ExampleAutoIncrement.Unmarshal(m, b)
 }
 func (m *ExampleAutoIncrement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ExampleAutoIncrement.Marshal(b, m, deterministic)
 }
-func (dst *ExampleAutoIncrement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ExampleAutoIncrement.Merge(dst, src)
+func (m *ExampleAutoIncrement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExampleAutoIncrement.Merge(m, src)
 }
 func (m *ExampleAutoIncrement) XXX_Size() int {
 	return xxx_messageInfo_ExampleAutoIncrement.Size(m)
@@ -133,11 +137,9 @@ func init() {
 	proto.RegisterType((*ExampleAutoIncrement)(nil), "ormpb.examples.mysql.ExampleAutoIncrement")
 }
 
-func init() {
-	proto.RegisterFile("ormpb/examples/mysql/example.proto", fileDescriptor_example_eebe85aef3454405)
-}
+func init() { proto.RegisterFile("ormpb/examples/mysql/example.proto", fileDescriptor_b319b6f29f5406a4) }
 
-var fileDescriptor_example_eebe85aef3454405 = []byte{
+var fileDescriptor_b319b6f29f5406a4 = []byte{
 	// 348 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x91, 0xc1, 0x4b, 0xfb, 0x30,
 	0x1c, 0xc5, 0xc9, 0xb6, 0xae, 0x5b, 0x7e, 0x3f, 0x3c, 0xc4, 0x21, 0x65, 0x3b, 0x58, 0x8a, 0x6c,
@@ -151,7 +153,7 @@ var fileDescriptor_example_eebe85aef3454405 = []byte{
 	0x56, 0x29, 0xdb, 0x79, 0xc0, 0x07, 0xa1, 0x13, 0x9f, 0x7c, 0x1c, 0x0f, 0xf3, 0xde, 0x1d, 0xd0,
 	0x8b, 0x0f, 0x92, 0x61, 0x2b, 0x6f, 0x77, 0x68, 0x01, 0x07, 0x25, 0xe1, 0xd4, 0xeb, 0xf9, 0x20,
 	0x1c, 0xc7, 0xa7, 0xad, 0x3c, 0x34, 0x47, 0xed, 0xb6, 0xef, 0xbd, 0x81, 0x44, 0x4f, 0xe8, 0x02,
-	0x3a, 0x94, 0x13, 0x56, 0x78, 0x7d, 0xed, 0x34, 0xbc, 0xd0, 0xf0, 0x6e, 0x40, 0x62, 0x44, 0x14,
+	0x3a, 0x94, 0x13, 0x56, 0x78, 0x7d, 0xed, 0x34, 0xbc, 0x1b, 0xc3, 0x0b, 0x41, 0x62, 0x44, 0x14,
 	0x40, 0x47, 0x0a, 0x56, 0x2a, 0x6f, 0xe0, 0x83, 0x10, 0xc4, 0xff, 0x5b, 0xd9, 0x5d, 0x3a, 0x57,
 	0xd7, 0x78, 0xb5, 0x4a, 0x8c, 0x84, 0x6e, 0x21, 0xcc, 0x2b, 0x4a, 0x14, 0xdd, 0xa5, 0x44, 0x79,
 	0x8e, 0x0f, 0xc2, 0x7f, 0xcb, 0x29, 0x36, 0xd1, 0xb1, 0x8d, 0x86, 0x1f, 0x6c, 0xf4, 0x64, 0xdc,
@@ -160,5 +162,5 @@ var fileDescriptor_example_eebe85aef3454405 = []byte{
 	0xf9, 0xbf, 0xbb, 0x70, 0xbb, 0x2e, 0x6c, 0x09, 0xeb, 0xcb, 0x96, 0xe3, 0xc1, 0xb3, 0x0e, 0x9b,
 	0x92, 0x46, 0x89, 0x94, 0x59, 0xc0, 0xcf, 0x47, 0xe2, 0x05, 0x9c, 0xe5, 0x82, 0xe3, 0xbf, 0xbe,
 	0x0f, 0xcb, 0xec, 0x71, 0xc4, 0xb8, 0x14, 0x95, 0x92, 0x59, 0x36, 0xd4, 0x49, 0x56, 0x5f, 0x01,
-	0x00, 0x00, 0xff, 0xff, 0xc6, 0xba, 0x2a, 0xc3, 0x0e, 0x02, 0x00, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0xaa, 0xa7, 0xb7, 0x24, 0x0e, 0x02, 0x00, 0x00,
 }

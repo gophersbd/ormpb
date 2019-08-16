@@ -9,12 +9,11 @@ services:
 
 matrix:
   include:
-    - go: 1.10.1
+    - go: 1.12.8
 
 before_script:
-  - ./hack/scripts/go.sh
-  - ./hack/scripts/protoc.sh
-  - make tools
+  - ./hack/scripts/install_tools.sh
+  - ./hack/scripts/install_protoc.sh
   - psql -c 'create database travis_ci_test;' -U postgres
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 

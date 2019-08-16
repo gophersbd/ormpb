@@ -32,12 +32,6 @@ type Registry struct {
 
 	// prefix is a prefix to be inserted to golang package paths generated from proto package names.
 	prefix string
-
-	// pkgMap is a user-specified mapping from file path to proto package.
-	pkgMap map[string]string
-
-	// importPath is used as the package if no input files declare go_package. If it contains slashes, everything up to the rightmost slash is ignored.
-	importPath string
 }
 
 // NewRegistry returns a new Registry.

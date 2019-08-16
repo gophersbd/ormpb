@@ -41,7 +41,7 @@ func TestMysql_GetUpSQL(t *testing.T) {
 	assert.Nil(t, err)
 
 	p := &postgres{}
-	p.GetUpSQL(msg)
+	_, _ = p.GetUpSQL(msg)
 }
 
 func TestMysql_GetDownSQL(t *testing.T) {

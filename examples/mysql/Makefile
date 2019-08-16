@@ -1,2 +1,2 @@
 gen:
-	@prototool gen
+	@prototool all

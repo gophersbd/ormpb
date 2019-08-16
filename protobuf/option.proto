@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-import "google/protobuf/descriptor.proto";
-
 package ormpb.protobuf;
 
-option go_package = "github.com/gophersbd/ormpb/protobuf";
+option go_package = "protobuf";
+
+import "google/protobuf/descriptor.proto";
 
 // TODO: (@sadlil) contact authorites to get unique field numbers
 
